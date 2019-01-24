@@ -1,0 +1,277 @@
+<meta charset="utf-8">
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-10">
+		<!--         <h2>用户数据</h2> -->
+		<ol class="breadcrumb">
+			<li><a href="index.html">用户数据</a></li>
+			<li class="active"><strong>登录数据</strong></li>
+		</ol>
+	</div>
+	<div class="col-lg-2"></div>
+</div>
+
+<div id="data_5" class="row">
+	<div class="col-lg-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-content">
+				<div class="row">
+					<div class="col-sm-8 m-b-xs" style="overflow: hidden">
+						<div class="input-daterange input-group col-sm-10" id="datepicker"
+							style="float: left; width: 40%">
+							<span class="input-group-addon">Range select</span> <input
+								type="text" class="input-sm form-control" id="starttime"
+								name="starttime" value="" ng-model="starttime" /> <span
+								class="input-group-addon">到</span> <input type="text"
+								class="input-sm form-control" id="endtime" name="endtime"
+								value="" ng-model="endtime" />
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="input-group">
+							<span class="input-group-btn"><input type="button"
+								class="btn btn-sm btn-primary" value="查询" onclick="findinfo();" /></span>
+							<span class="input-group-btn"><input type="button"
+								class="btn btn-sm btn-primary" value="导出"
+								onclick="exportinfo();" /></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="logonBar" style="height: 400px"></div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>登录汇总</h5>
+			</div>
+			<div class="ibox-content">
+				<div id="pieChart" style="height: 400px"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+ var exportinfo=function(){
+ 	var start=$("#starttime").val();
+ 	var end=$("#endtime").val();
+    window.location.href="logonAnalysisAction/exportLogonInfo.do?starttime="+start+"&endtime="+end;
+ }
+ 
+ var findinfo=function(){
+	 var starttime=$("#starttime").val();
+	 var endtime=$("#endtime").val();
+	 logonBar(starttime,endtime);
+	 logonPie(starttime,endtime);
+ }
+ 
+ $(function(){
+	 $('#data_5 .input-daterange').datepicker({
+		    keyboardNavigation: false,
+		    forceParse: false,
+		    autoclose: true,
+	 });
+ })
+ </script>
+<script>
+ var startDrawing=function(data){
+	 require.config({
+        paths: {
+            echarts: 'echart/build/dist'
+        }
+	 });
+	 require(
+		  [
+		      'echarts',
+		      'echarts/chart/bar'
+		  ],function(ec){
+			  var logonBar = ec.init(document.getElementById('logonBar')); 
+			  option = {
+					    title : {
+					        text: '登录分析',
+					        subtext: 'ExcelHome',
+					        sublink: ''
+					    },
+					    tooltip : {
+					        trigger: 'axis',
+					        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+					            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+					        },
+					        formatter: function (params){
+					            return params[0].name + '<br/>'
+					                   + params[0].seriesName + ' : ' + params[0].value + '<br/>'
+					                   + params[1].seriesName + ' : ' + (params[1].value);
+					        }
+					    },
+					    legend: {
+					        selectedMode:false,
+					        data:data.titleList
+					    },
+					    toolbox: {
+					        show : true,
+					        feature : {
+					            mark : {show: true},
+					            dataView : {show: true, readOnly: false},
+					            restore : {show: true},
+					            saveAsImage : {show: true}
+					        }
+					    },
+					    calculable : false,
+					    xAxis : [
+					        {
+					            type : 'category',
+					            data : data.lineList
+					        }
+					    ],
+					    yAxis : [
+					        {
+					            type : 'value',
+					            boundaryGap: [0, 0.1]
+					        }
+					    ],
+					    series : [
+					        {
+					            name:data.titleList[0],
+					            type:'bar',
+					            stack: 'sum',
+					            barCategoryGap: '50%',
+					            itemStyle: {
+					                normal: {
+					                    color: '#5cb2ef',
+					                    barBorderColor: 'tomato',
+					                    barBorderWidth: 0,
+					                    barBorderRadius:0,
+					                    label : {
+										    position: 'inside',
+					                        show: true
+					                    }
+					                }
+					            },
+					            data:data.topList
+					        },
+					        {
+					            name:data.titleList[1],
+					            type:'bar',
+					            stack: 'sum',//组合名称
+					            itemStyle: {
+					                normal: {
+					                    color: '#2ec7c9',
+					                    barBorderColor: 'tomato',
+					                    barBorderWidth: 0,
+					                    barBorderRadius:0,
+					                    label : {
+					                        show: true, 
+					                        position: 'inside',
+					                        formatter: function (params) {
+					                            for (var i = 0, l = option.xAxis[0].data.length; i < l; i++) {
+					                                //if (option.xAxis[0].data[i] == params.name) {
+					                                //    return option.series[0].data[i] + params.value;
+					                               //}
+												   return params.value;
+					                            }
+					                        },
+					                        textStyle: {
+					                            color: ''
+					                        }
+					                    }
+					                }
+					            },
+					            data:data.lowerList
+					        }
+					    ]
+					};
+			  logonBar.setOption(option);
+		  })
+ }     
+ 
+ var drawPie = function(response){
+	 require.config({
+	        paths: {
+	            echarts: 'echart/build/dist'
+	        }
+		 });
+	 require(
+			  [
+			      'echarts',
+			      'echarts/chart/pie'
+			  ],function(ec){
+				  var pieChart = ec.init(document.getElementById('pieChart')); 
+				  var option2= {
+						    tooltip : {
+						        trigger: 'item',
+						        formatter: "{a} <br/>{b} : {c} ({d}%)"
+						    },
+						    legend: {
+						        x : 'center',
+						        data:['PC','Mobile']
+						    },
+						    toolbox: {
+						        show : true,
+						        feature : {
+						            restore : {show: true},
+						            saveAsImage : {show: true}
+						        }
+						    },
+						    calculable : false,
+						    series : [
+						        {
+						            name:'访问来源',
+						            type:'pie',
+						            radius : ['50%', '70%'],
+						            itemStyle : {
+						                normal : {
+						                    label : {
+						                        show : true
+						                    },
+						                    labelLine : {
+						                        show : true
+						                    }
+						                },
+						                emphasis : {
+						                    label : {
+						                        show : true,
+						                        position : 'center',
+						                        textStyle : {
+						                            fontSize : '30',
+						                            fontWeight : 'bold'
+						                        }
+						                    }
+						                }
+						            },
+						            data:response
+						        }
+						    ]
+						};
+				  pieChart.setOption(option2);
+			  })
+ }
+ var logonBar=function(starttime,endtime){
+	var config = {params: {starttime:starttime,endtime:endtime}};
+    $http.get("logonAnalysisAction/getLogonInfo.do",config)
+      .success(function(response) {
+    	  $scope.starttime=response.InitializationTime[0];
+    	  $scope.endtime=response.InitializationTime[1];
+    	  startDrawing(response);
+       });
+ };
+ 
+ var logonPie = function(starttime,endtime){
+	 var config = {params: {starttime:starttime,endtime:endtime}};
+     $http.get("logonAnalysisAction/getLogonPieInfo.do",config)
+      .success(function(response) {
+    	  drawPie(response);
+       });
+ }
+ 
+ var pageload=function(){
+	 logonBar();
+	 logonPie();
+ }
+  
+
+ </script>

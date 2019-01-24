@@ -1,0 +1,44 @@
+<meta charset="utf-8">
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <li class="nav-header">
+            <div class="dropdown profile-element" dropdown>
+                <img alt="image" class="img-circle" src="img/common_head.png"/>
+                <a class="dropdown-toggle" dropdown-toggle href>
+                   <span class="clear">
+                       <span class="block m-t-xs">
+                           <strong class="font-bold">你好  {{ user.userRealname }} </strong>
+                    	</span>
+                       <span class="text-muted text-xs block">设置 <b class="caret"></b></span>
+                   </span>
+                </a>
+            </div>
+            <div class="logo-element">
+                GR
+            </div>
+        </li>
+		<ul side-navigation class="nav" id="side-menu"> 
+            <li ui-sref-active="active">
+                <a ui-sref="layouts"><i class="fa fa-desktop"></i>
+                    <span class="nav-label">首页</span>
+                    <span class="label label-primary pull-right">分析</span></a>
+            </li>
+            <li ng-class="{active: $state.includes('manage')}" ng-if="userMenu.manage">
+                <a href=""><i class="fa fa-support"></i> <span class="nav-label">平台管理</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('manage')}">
+                    <li ng-if="userMenu.usermanage" ui-sref-active="active"><a ui-sref="manage.usermanage"><i class="fa fa-users"></i>用户管理</a></li>
+                    <li ng-if="userMenu.platUserManage" ui-sref-active="active"><a ui-sref="manage.platUserManage"><i class="fa fa-users"></i>平台登陆用户</a></li>
+                    <li ng-if="userMenu.platMenuManage" ui-sref-active="active"><a ui-sref="manage.platMenuManage"><i class="fa fa-users"></i>平台菜单管理</a></li>
+                    <li ng-if="userMenu.druidManage" ui-sref-active="active"><a ui-sref="manage.druidManage"><i class="fa fa-users"></i>数据库性能监控</a></li>
+                    <li ng-if="userMenu.realTimeLog" ui-sref-active="active"><a ui-sref="manage.realTimeLog"><i class="fa fa-users"></i>实时日志监控</a></li>
+                </ul>
+            </li>
+            <li ng-repeat="parentMenu in allMenu" ng-class="{active: $state.includes('{{ parentMenu.menuCode}}')}" ng-if="userMenu[parentMenu.menuCode]">
+                <a href=""><i class="fa fa-line-chart"></i> <span class="nav-label">{{ parentMenu.name }}</span> <span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" ng-class="{in: $state.includes('{{ parentMenu.menuCode}}')}">
+                    <li ng-repeat="menu in parentMenu.subMenus" ng-if="userMenu[menu.menuCode]" ui-sref-active="active"><a ui-sref="{{ menu.statePath }}">{{ menu.name }}</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>

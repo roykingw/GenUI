@@ -1,0 +1,125 @@
+<meta charset="utf-8">
+<style>
+.navli{
+	padding-left:52px;
+	position:relative;
+}
+</style>
+<div class="gray-bg">
+	<div class="row">
+		<div class="col-lg-4">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						当前登陆用户
+					</h5>
+					&nbsp;&nbsp;&nbsp;&nbsp;<a ng-click="getLoginUsers()">刷新</a>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div id="userDiv" class="form-group">
+	                    <div class="radio radio-primary" ng-repeat="user in allUser">
+	                        <input type="radio" name="user" value="{{ user }}" id="{{ user.sessionId }}" ng-click="chooseUser()" ng-model="page.loginUser" /> <label for="{{ user.sessionId }}">{{ user.userRealname }}</label>
+	                    </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>用户信息:<small>本信息只实时查询，不持久化保存，日志回查请查看log日志</small></h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					登陆用户: {{ page.user.userRealname }}  <br >
+					sessionId:  {{ page.user.sessionId }} <br>
+					登陆时间:{{ page.user.loginTime }}  <br>
+					登陆IP: {{ page.user.loginIp }} <br>
+					操作记录: <span ng-repeat="operation in page.user.operations">{{ operation }}<br></span> 
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-2">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						操作区
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<button class="btn btn-sm btn-primary" ng-click="forcelogout()">强制下线</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var pageload = function() {
+		$scope.allUser={};
+		$scope.page = {};
+		//Collapse ibox function
+		$('.collapse-link').click(function() {
+			var ibox = $(this).closest('div.ibox');
+			var button = $(this).find('i');
+			var content = ibox.find('div.ibox-content');
+			content.slideToggle(200);
+			button.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
+			ibox.toggleClass('').toggleClass('border-bottom');
+			setTimeout(function() {
+				ibox.resize();
+				ibox.find('[id^=map-]').resize();
+			}, 50);
+		});
+		$scope.chooseUser = function(){
+			$scope.page.user = eval("("+$scope.page.loginUser+")");
+		}
+		$scope.forcelogout = function(){
+			if($scope.page.user.sessionId){
+				swal({
+					title:"强制用户 "+$scope.page.user.userRealname+" 下线",
+					text:"强制下线后，用户将需要重新登陆才能访问系统",
+					type: "warning",
+	                showCancelButton: true,
+	                cancelButtonText:"关闭",
+	                confirmButtonColor: "#DD6B55",
+	                confirmButtonText: "确认",
+	                closeOnConfirm: false
+				},function(){
+					//加载用户
+					$http.post("PlatUserManageAction/forcelogout.do",{"sessionId":$scope.page.user.sessionId}).success(function(data) {
+						swalsucc(data.msg,"用户已强制下线。如果需要限制访问请修改密码");
+						$scope.page.user={};
+						$scope.getLoginUsers();
+					});
+				})
+			}else{
+				swalerror("请选择登陆用户");
+			}
+		}
+		$scope.getLoginUsers = function(){
+			$scope.page.user={};
+			//加载用户
+			$http.post("PlatUserManageAction/getLoginUsers.do").success(function(data) {
+				$scope.allUser={};
+				if (data.length > 0) {
+					$scope.allUser = data;
+				}
+			});
+		}
+		$scope.getLoginUsers();
+	}
+</script>

@@ -1,0 +1,268 @@
+<meta charset="utf-8">
+<div class="row">
+	<div class="col-lg-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>增删改查</h5>
+			</div>
+			<div class="ibox-content">
+				<div class="row">
+					<div class="col-sm-6 m-b-xs" style="overflow: hidden">
+						<div class="input-daterange input-group" id="datepicker"
+							style="float: left">
+							<span class="input-group-addon">过期时间</span>
+							<input type="text" class="input-sm form-control" value="" ng-model="queryBean.expDt" />
+							<span class="input-group-addon">更新时间</span>
+					        <input type="text" class="input-sm form-control" value="" ng-model="queryBean.updateDate"/>
+						</div>
+					</div>
+					<div class="col-sm-3 m-b-xs" style="overflow: hidden">
+						<div class="input-group">
+							<span class="input-group-addon">黑名单类型</span> <input type="text"
+								class="input-sm form-control" value="" ng-model="queryBean.blackType" />
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="input-group" style="padding-right: 50%">
+							<span class="input-group-btn">
+								<button type="button" ng-click="reloadinfo()"
+									class="btn btn-sm btn-primary" ng-if="userPages.uiblackInfoDubbo_query">
+									查询</button>
+							</span> <span class="input-group-btn">
+								<button type="button" ng-click="exportinfo()"
+									class="btn btn-sm btn-primary"
+									ng-if="userPages.uiblackInfoDubbo_export">导出</button>
+							</span> <span class="input-group-btn">
+								<button type="button" ng-click="opennew()"
+									class="btn btn-sm btn-primary"
+									ng-if="userPages.uiblackInfoDubbo_export">新增</button>
+							</span>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-sm btn-primary" ng-click="saveSnapShot()">
+									快照</button>
+							</span>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>操作</th>
+								<th style="word-break: keep-all; white-space: nowrap;">黑名单类型</th>
+								<th style="word-break: keep-all; white-space: nowrap;">关键字</th>
+								<th style="word-break: keep-all; white-space: nowrap;">交易类型</th>
+								<th style="word-break: keep-all; white-space: nowrap;">业务类型</th>
+								<th style="word-break: keep-all; white-space: nowrap;">过期时间</th>
+								<th style="word-break: keep-all; white-space: nowrap;">理由</th>
+								<th style="word-break: keep-all; white-space: nowrap;">备注</th>
+								<th style="word-break: keep-all; white-space: nowrap;">创建日期</th>
+								<th style="word-break: keep-all; white-space: nowrap;">更新者</th>
+								<th style="word-break: keep-all; white-space: nowrap;">更新日期</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="page in pages track by $index">
+								<td><div class="input-group-btn"><a class="label label-primary" ng-click="deleteData(page)" title="删除"><i class="fa fa-minus-square-o" aria-hidden="true"></i></a>
+								<a class="label label-primary" ng-click="showData(page)" title="修改"><i class="fa fa-pencil-square-o"/></a></div></td>
+								<td>{{ page.blackType }}</td>		
+								<td>{{ page.keyId }}</td>		
+								<td>{{ page.txTyp }}</td>		
+								<td>{{ page.busTyp }}</td>		
+								<td>{{ page.expDt }}</td>		
+								<td>{{ page.reason }}</td>		
+								<td>{{ page.remarks }}</td>		
+								<td>{{ page.createDate }}</td>		
+								<td>{{ page.updateBy }}</td>		
+								<td>{{ page.updateDate }}</td>		
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<nav>
+					<ul class="pager">
+						<li><a href="javascript:void(0)"
+							ng-click="pageInfo.paginationClick('left')">上一页</a></li>
+						<li><a href="javascript:void(0)"
+							ng-click="pageInfo.paginationClick('right')">下一页</a></li>
+					</ul>
+				</nav>
+				<pre>当前页:{{ pageInfo.currPage  }}&nbsp;&nbsp;&nbsp;总页数:{{ pageInfo.totalPageCount }}&nbsp;&nbsp;&nbsp;总记录数:{{ pageInfo.totalCount }}</pre>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal inmodal fade" id="modifyModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">黑名单ID：{{ obj.id }}</h4>
+			</div>
+			<div class="modal-body">
+				<form class="bs-example bs-example-form" role="form">
+					<input type="hidden" class="form-control" ng-model="obj.id" />
+					<div class="input-group">
+						<span class="input-group-addon">黑名单类型:</span>
+						<input type="text" class="form-control" ng-readonly="obj.id" ng-model="obj.blackType"/>
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">关键字:</span>
+						<input type="text" class="form-control" ng-readonly="obj.id" ng-model="obj.keyId" />
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">交易类型:</span>
+						<input type="text" class="form-control" ng-readonly="obj.id" ng-model="obj.txTyp" />
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon">业务类型:</span>
+						<input type="text" class="form-control" ng-readonly="obj.id" ng-model="obj.busTyp" />
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon">过期时间:</span>
+						<input type="text" class="form-control input-daterange" ng-model="obj.expDt" />
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon">原因:</span>
+						<input type="text" class="form-control" ng-model="obj.reason" />
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon">备注:</span>
+						<input type="text" class="form-control" ng-model="obj.remarks" />
+					</div><br>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary"
+					ng-click="modifyData()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+  var pageBean = {};
+  var urlCode ;
+  //日期插件设置
+  var dateInit=function(){
+	$('.input-daterange').datepicker({
+		format:"yyyymmdd",
+	    keyboardNavigation: false,
+	    forceParse: true,
+	    autoclose: true,
+    });
+  }
+  //页面初始函数
+  var pageload=function(){
+	  if($scope.urlCode){
+		  urlCode = $scope.urlCode;
+	  }else{
+		  swallerror("请在config.js中配置urlCode");
+		  return false;
+	  }
+	  dateInit();
+	  loadinfo(true);
+	  $scope.queryBean = {};
+	  $scope.exportinfo=function(){
+		var exportUrl = urlCode+"/exportData.do";
+		var queryStr = param($scope.queryBean);
+	    if(queryStr){
+	    	exportUrl += "?"+queryStr;
+	    }
+	    window.location.href=exportUrl;
+	  }	  
+	  
+	  $scope.reloadinfo = function(){
+		  loadinfo(true);
+	  }
+	  
+	  $scope.saveSnapShot = function(){
+		  SnapShot.saveSnapShot($scope,'/UiBlackInfoController/queryData.do','导出');
+	  }
+	  
+	  $scope.deleteData = function(page){
+		  swal({
+				title:"删除数据",
+				text:"目前删除后无法恢复，需要确认删除吗？",
+				type: "warning",
+		        showCancelButton: true,
+		        cancelButtonText:"关闭",
+		        confirmButtonColor: "#DD6B55",
+		        confirmButtonText: "确认",
+		        closeOnConfirm: true
+			},function(){
+				$http.post(urlCode+"/deleteData.do",page)
+				  .success(function(data){
+					  swalsucc(data.desc);
+					  loadinfo();
+				  })
+			})
+	  }
+	  $scope.showData = function(obj){
+		  $scope.obj = obj;
+		  $("#modifyModal").modal("show");
+	  }
+	  
+	  $scope.opennew = function(){
+		  $scope.obj = {};
+		  $("#modifyModal").modal("show");
+	  }
+	  $scope.modifyData = function(){
+		  swal({
+				title:"修改数据",
+				text:"确认修改数据",
+				type: "info",
+		        showCancelButton: true,
+		        cancelButtonText:"关闭",
+		        confirmButtonColor: "#DD6B55",
+		        confirmButtonText: "确认",
+		        closeOnConfirm: true
+			},function(){
+				$http.post(urlCode+"/updateData.do",$scope.obj)
+				  .success(function(data){
+					  swalsucc(data.desc);
+					  $scope.obj = {};
+					  $("#modifyModal").modal("hide");
+					  loadinfo();
+				  })
+			})
+	  }
+  }   
+  
+  //数据加载和渲染
+  var loadinfo=function(isReload){
+	//首次查询设置currPage=1
+	if(isReload){
+		pageBean.currPage='1';
+	}
+	if(!pageBean.currPage){
+		pageBean.currPage='1';
+	}
+	//设置每页显示条数。默认30
+	//pageBean.pageSize=30;
+	//查询前情况page
+	pageBean.page={};
+	var queryUrl = urlCode + "/queryData.do";
+    var queryStr = param($scope.queryBean);
+    if(queryStr){
+    	queryUrl += "?"+queryStr;
+    }
+	//数据查询
+	$http.post(queryUrl, pageBean).success(
+			function(response) {
+				pageBean = response;//接替后台穿过来的json
+				$scope.pages = pageBean.pageT;//数据集合
+				$scope.tableHeaders = pageBean.tableHeaders
+
+				setPagination(pageBean.currPage, pageBean.totalPageCount,
+						pageBean.totalCount, angula);
+			})
+	}
+</script>

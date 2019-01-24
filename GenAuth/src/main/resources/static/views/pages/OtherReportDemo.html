@@ -1,0 +1,532 @@
+<meta charset="utf-8"/>
+<div class="row wrapper border-bottom white-bg page-heading">
+	<div class="col-lg-10">
+		<h2>系统演示说明</h2>
+		<ol class="breadcrumb">
+			<li><a>Home</a></li>
+			<li><a>UI Elements</a></li>
+			<li class="active"><strong>系统演示说明</strong></li>
+		</ol>
+	</div>
+	<div class="col-lg-2"></div>
+</div>
+<div id="test" style="height:400px">
+</div>
+<div class="wrapper wrapper-content animated fadeIn">
+	<div class="row">
+		<div class="col-lg-12">
+			<div  class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						权限控制说明 <small class="m-l-sm">完全自定义实现的权限控制系统</small>
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+						<a class="dropdown-toggle" data-toggle="dropdown"> <i class="fa fa-wrench"></i></a>
+						<ul class="dropdown-menu dropdown-user">
+							<li><a>Config option 1</a></li>
+							<li><a>Config option 2</a></li>
+						</ul>
+						<a class="close-link"> <i class="fa fa-times"></i></a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<p>
+						<strong>自定义的页面权限控制</strong> 针对每个菜单，配置了 查询 和 导出 两个页面控件权限标识，可以在用户管理页面进行权限分配。
+					</p>
+					<p>
+						<small> 页面权限标志的格式为  查询：userPages.${menuCode}_query 和  导出：userPages.${menuCode}_export，对需要进行权限控制的页面控件，
+						可以添加ng-if属性进行权限绑定。 例如 本页的权限控制可配置为 ng-if="userPages.OtherDemo1_query" 和 ng-if="userPages.OtherDemo1_export" </small>
+					</p>
+					<p>
+						<small> 示例详见下面两个panel,在平台管理->用户管理 里配置下页面的查询导出权限试试看把。 </small>
+					</p>
+				</div>
+				<div class="ibox-footer">
+					<span class="pull-right"> The righ side of the footer </span> This
+					is simple footer example
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-12" ng-if="userPages.testOther1_query">
+			<div class="ibox collapsed">
+				<div class="ibox-title">
+					<h5>初始最小化的panel,<small>我对应 查询 权限</small>
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i></a>
+						<a class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></a>
+						<ul class="dropdown-menu dropdown-user">
+							<li><a href="tabs_panels.html#">Config option 1</a></li>
+							<li><a href="tabs_panels.html#">Config option 2</a></li>
+						</ul>
+						<a class="close-link"> <i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<p>Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
+						natoque penatibus et magnis dis parturient montes, nascetur
+						ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
+						pretium quis, sem. Nulla consequat massa quis enim.</p>
+					<p>Donec pede justo, fringilla vel, aliquet nec, vulputate
+						eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis
+						vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
+						tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-12" ng-if="userPages.testOther1_export">
+			<div class="ibox">
+				<div class="ibox-title">
+					<h5>带全屏功能的Panel <small>我对应 导出 权限</small></h5>
+					<div class="ibox-tools">
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+						</a> <a class="fullscreen-link"> <i class="fa fa-expand"></i>
+						</a> <a class="close-link"> <i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+
+					<p>Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
+						natoque penatibus et magnis dis parturient montes, nascetur
+						ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
+						pretium quis, sem. Nulla consequat massa quis enim.</p>
+					<p>Donec pede justo, fringilla vel, aliquet nec, vulputate
+						eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis
+						vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
+						tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-12">
+			<div class="ibox">
+				<div class="ibox-title">
+					<h5>Example of constant height with scroll</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+						</a> <a class="dropdown-toggle" data-toggle="dropdown"
+							href="tabs_panels.html#"> <i class="fa fa-wrench"></i>
+						</a>
+						<ul class="dropdown-menu dropdown-user">
+							<li><a href="tabs_panels.html#">Config option 1</a></li>
+							<li><a href="tabs_panels.html#">Config option 2</a></li>
+						</ul>
+						<a class="close-link"> <i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div class="scroll_content">
+						<p>Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
+							natoque penatibus et magnis dis parturient montes, nascetur
+							ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu,
+							pretium quis, sem. Nulla consequat massa quis enim. Aenean
+							commodo ligula eget dolor. Aenean massa. Cum sociis natoque
+							penatibus et magnis dis parturient montes, nascetur ridiculus
+							mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
+							quis, sem. Nulla consequat massa quis enim. Aenean commodo ligula
+							eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis
+							dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+							ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+							consequat massa quis enim.</p>
+
+						<p>Donec pede justo, fringilla vel, aliquet nec, vulputate
+							eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis
+							vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
+							tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean
+							commodo ligula eget dolor. Aenean massa. Cum sociis natoque
+							penatibus et magnis dis parturient montes, nascetur ridiculus
+							mus. Donec quam felis, ultricies nec, pellentesque eu, pretium
+							quis, sem. Nulla consequat massa quis enim. Aenean commodo ligula
+							eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis
+							dis parturient montes, nascetur ridiculus mus. Donec quam felis,
+							ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+							consequat massa quis enim. Aenean commodo ligula eget dolor.
+							Aenean massa. Cum sociis natoque penatibus et magnis dis
+							parturient montes, nascetur ridiculus mus. Donec quam felis,
+							ultricies nec, pellentesque eu, pretium quis, sem. Nulla
+							consequat massa quis enim.</p>
+						<p>Donec pede justo, fringilla vel, aliquet nec, vulputate
+							eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis
+							vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
+							tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+						<p>Donec pede justo, fringilla vel, aliquet nec, vulputate
+							eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis
+							vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer
+							tincidunt. Cras dapibus. Vivamus elementum semper nisi.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-lg-12">
+			<div class="ibox">
+				<div class="ibox-title">
+					<h5>
+						自定义背景颜色的panel <small>开发功能说明-2018年3月1日</small>
+					</h5>
+				</div>
+				<div class="ibox-content">
+
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="panel panel-default">
+								<div class="panel-heading">已实现 1、权限系统</div>
+								<div class="panel-body">
+									<p>完全自定义实现的权限系统，相比于其他现成的权限框架如shiro，健壮性肯定不是同一个级别的，但是好在灵活，透明，易扩展。
+									不局限于RBAC的权限体系，可以随意进行改造，引入机构、岗位、地域等其他的权限因素。</p>
+									<p>当然，健壮性也是一个需要继续改进的地方。</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="panel panel-primary">
+								<div class="panel-heading">已实现 2、报表工具引入</div>
+								<div class="panel-body">
+									<p>
+										为了简化开发人员的工作，让业务人员也能参与到报表开发中来， 引入了CBoard进行报表开发。可以由开发人员配置好数据源或者数据切片之后由业务人员自己开发想要的报表。
+									</p>
+									<p>
+										当然， 这是个以开源项目为基础的修改版本，以后如果开源工具有更新了， 再需要做定制开发
+									</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="panel panel-success">
+								<div class="panel-heading">部分实现 3、分布式前后端分离</div>
+								<div class="panel-body">
+									<p>利用dubbo把前后端开发做了分离，一方面是为了做更多来源的服务集成，另一方面是为了把权限管理独立成一个模块，在数据源上就与业务系统进行分离。
+									而在此基础上，在server端，实现了一套基于Bean注释的快速完成增删改查的服务端实现。针对常用的一表一页面的场景，可以实现0开发。
+									当然，这个功能目前只完成了查询和导出的部分，其他新增、修改、删除等功能以后也考虑在其中实现。
+									并且，针对查询和导出， 目前字段查询的操作符还只支持 = 其他操作符以后也会考虑集成进来。
+									反正目的就是为了减少开发，最好到零开发。</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="panel panel-info">
+								<div class="panel-heading">
+									<i class="fa fa-info-circle"></i> 待实现：1、增删改查模版功能完善
+								</div>
+								<div class="panel-body">
+									<p>基于注释的快速功能开发，还有些地方需要继续完善，比如 修改、删除的快速实现，查询功能目前只支持 = 查询条件，
+									需要继续扩展完善一些其他的操作符</p>
+								</div>
+
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="panel panel-warning">
+								<div class="panel-heading">
+									<i class="fa fa-warning"></i> 待实现：2、模版生成自动化
+								</div>
+								<div class="panel-body">
+									<p>目前关于常用的CRUD管理页面，前端模版和后端的配置都只需要复制粘贴做一点点小的调整就可以了。以后希望把这些小的调整都用模版花自动生成的方式，继续解放开发人员的工作</p>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-4">
+							<div class="panel panel-danger">
+								<div class="panel-heading">待实现：3、其他优化工作</div>
+								<div class="panel-body">
+									<p>目前规划的几个优化方向：1、系统监控信息落地，用户登录、websocket监控目前都还没有落地持久化保存，以后会加上，并进行一些简单的数据分析。</p>
+									<p>2、权限策略优化：1重复登录处理策略进行优化。2系统减负优化，如用户权限信息在每次发生请求时都会去后台进行一下判断，请求太多无疑让权限部分加重了系统负担。
+									优化策略已有初步想法，待实现。准备将用户信息以密钥形式保存到客户端，客户端只需要定时到服务端来更新密钥，减少因为权限而反生的请求。
+									</p>
+									<p>2、实时功能优化：以后准备在websocket的基础上，再引入消息中间件，完善一些实时方面的功能。滚屏监控基础上，实现图形化的实时监控，如股票一样的效果。
+									</p>
+									<p>3、用户行为数据收集：增加一些更详细的用户行为数据收集。为做大数据分析做个基础。
+									</p>
+								</div>
+								<div class="panel-footer">Panel Footer</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-6">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>Collaps panels</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
+						</a> <a class="dropdown-toggle" data-toggle="dropdown"
+							href="tabs_panels.html#"> <i class="fa fa-wrench"></i>
+						</a>
+						<ul class="dropdown-menu dropdown-user">
+							<li><a href="tabs_panels.html#">Config option 1</a></li>
+							<li><a href="tabs_panels.html#">Config option 2</a></li>
+						</ul>
+						<a class="close-link"> <i class="fa fa-times"></i>
+						</a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div class="panel-body">
+						<div class="panel-group" id="accordion">
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h5 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="tabs_panels.html#collapseOne">Collapsible Group
+											Item #1</a>
+									</h5>
+								</div>
+								<div id="collapseOne" class="panel-collapse collapse in">
+									<div class="panel-body">Lorem ipsum dolor sit amet,
+										consectetur adipisicing elit, sed do eiusmod tempor incididunt
+										ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+										quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+										ea commodo consequat. Duis aute irure dolor in reprehenderit
+										in voluptate velit esse cillum dolore eu fugiat nulla
+										pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+										in culpa qui officia deserunt mollit anim id est laborum.</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="tabs_panels.html#collapseTwo">Collapsible Group
+											Item #2</a>
+									</h4>
+								</div>
+								<div id="collapseTwo" class="panel-collapse collapse">
+									<div class="panel-body">Lorem ipsum dolor sit amet,
+										consectetur adipisicing elit, sed do eiusmod tempor incididunt
+										ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+										quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+										ea commodo consequat. Duis aute irure dolor in reprehenderit
+										in voluptate velit esse cillum dolore eu fugiat nulla
+										pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+										in culpa qui officia deserunt mollit anim id est laborum.</div>
+								</div>
+							</div>
+							<div class="panel panel-default">
+								<div class="panel-heading">
+									<h4 class="panel-title">
+										<a data-toggle="collapse" data-parent="#accordion"
+											href="tabs_panels.html#collapseThree">Collapsible Group
+											Item #3</a>
+									</h4>
+								</div>
+								<div id="collapseThree" class="panel-collapse collapse">
+									<div class="panel-body">Lorem ipsum dolor sit amet,
+										consectetur adipisicing elit, sed do eiusmod tempor incididunt
+										ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+										quis nostrud exercitation ullamco laboris nisi ut aliquip ex
+										ea commodo consequat. Duis aute irure dolor in reprehenderit
+										in voluptate velit esse cillum dolore eu fugiat nulla
+										pariatur. Excepteur sint occaecat cupidatat non proident, sunt
+										in culpa qui officia deserunt mollit anim id est laborum.</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<div class="jumbotron">
+				<h1>Jumbotron</h1>
+				<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+					Vestibulum tincidunt est vitae ultrices accumsan. Aliquam ornare
+					lacus adipiscing, posuere lectus et, fringilla augue. Lorem ipsum
+					dolor sit amet, consectetur adipiscing elit.</p>
+				<p>
+					<a role="button" class="btn btn-primary btn-lg">Learn more</a>
+				</p>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	var pageload = function(){
+		
+		var options = {
+			    "title": {},
+			    "grid": {
+			        "left": "50",
+			        "right": "20",
+			        "bottom": "15%",
+			        "top": "15%",
+			        "containLabel": false
+			    },
+			    "tooltip": {
+			        "trigger": "axis"
+			    },
+			    "legend": {
+			        "x": "left",
+			        "itemWidth": 15,
+			        "itemHeight": 10,
+			        "data": [
+			            "*-cuont",
+			            "0010-cuont",
+			            "0301-cuont",
+			            "0253-cuont",
+			            "0014-cuont",
+			            "1500-cuont",
+			            "L104-cuont"
+			        ]
+			    },
+			    "xAxis": {
+			        "type": "category",
+			        "data": [
+			            ""
+			        ],
+			        "axisLabel": {}
+			    },
+			    "yAxis": [
+			        {
+			            "name": "",
+			            "series_type": "bar",
+			            "type": "value",
+			            "cols": [
+			                {
+			                    "col": "ID",
+			                    "alias": "cuont",
+			                    "aggregate_type": "count"
+			                }
+			            ],
+			            "axisLabel": {},
+			            "min": null,
+			            "max": null,
+			            "scale": true
+			        }
+			    ],
+			    "series": [
+			        {
+			            "type": "bar",
+			            "valueAxisIndex": 0,
+			            "name": "*-cuont",
+			            "data": [
+			                129
+			            ],
+			            "barMaxWidth": 40,
+			            "yAxisIndex": 0
+			        },
+			        {
+			            "type": "bar",
+			            "valueAxisIndex": 0,
+			            "name": "0010-cuont",
+			            "data": [
+			                3
+			            ],
+			            "barMaxWidth": 40,
+			            "yAxisIndex": 0
+			        },
+			        {
+			            "type": "bar",
+			            "valueAxisIndex": 0,
+			            "name": "0301-cuont",
+			            "data": [
+			                1
+			            ],
+			            "barMaxWidth": 40,
+			            "yAxisIndex": 0
+			        },
+			        {
+			            "type": "bar",
+			            "valueAxisIndex": 0,
+			            "name": "0253-cuont",
+			            "data": [
+			                1
+			            ],
+			            "barMaxWidth": 40,
+			            "yAxisIndex": 0
+			        },
+			        {
+			            "type": "bar",
+			            "valueAxisIndex": 0,
+			            "name": "0014-cuont",
+			            "data": [
+			                1
+			            ],
+			            "barMaxWidth": 40,
+			            "yAxisIndex": 0
+			        },
+			        {
+			            "type": "bar",
+			            "valueAxisIndex": 0,
+			            "name": "1500-cuont",
+			            "data": [
+			                1
+			            ],
+			            "barMaxWidth": 40,
+			            "yAxisIndex": 0
+			        },
+			        {
+			            "type": "bar",
+			            "valueAxisIndex": 0,
+			            "name": "L104-cuont",
+			            "data": [
+			                3
+			            ],
+			            "barMaxWidth": 40,
+			            "yAxisIndex": 0
+			        }
+			    ]
+			};
+		var myChart = echarts.init($('#test').get(0));
+		myChart.setOption(options);
+		
+		
+		toastr.options = {
+				closeButton : true,
+				progressBar : true,
+				showMethod : 'slideDown',
+				hideMethod : "slideUp",
+				positionClass : "toast-top-center",
+				timeOut : 4000
+			};
+		toastr.success('基础panel布局展示', '带权限控制的自定义报表');
+		$('.scroll_content').slimscroll({
+            height: '200px'
+        })
+        
+     // Collapse ibox function
+        $('.collapse-link').click(function () {
+            var ibox = $(this).closest('div.ibox');
+            var button = $(this).find('i');
+            var content = ibox.find('div.ibox-content');
+            content.slideToggle(200);
+            button.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
+            ibox.toggleClass('').toggleClass('border-bottom');
+            setTimeout(function () {
+                ibox.resize();
+                ibox.find('[id^=map-]').resize();
+            }, 50);
+        });
+
+        // Close ibox function
+        $('.close-link').click(function () {
+            var content = $(this).closest('div.ibox');
+            content.remove();
+        });
+
+        // Fullscreen ibox function
+        $('.fullscreen-link').click(function () {
+            var ibox = $(this).closest('div.ibox');
+            var button = $(this).find('i');
+            $('body').toggleClass('fullscreen-ibox-mode');
+            button.toggleClass('fa-expand').toggleClass('fa-compress');
+            ibox.toggleClass('fullscreen');
+            setTimeout(function () {
+                $(window).trigger('resize');
+            }, 100);
+        });
+	}
+</script>

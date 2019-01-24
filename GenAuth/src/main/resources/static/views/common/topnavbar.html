@@ -1,0 +1,78 @@
+<meta charset="utf-8">
+<script>
+var modifyPass = function(){
+	$("#changePassModal").modal("show");
+}
+var modifyUserPass = function(){
+	$http.post("userManage/changePassword.do",
+			{"userId":$scope.user.userId,
+			 "oldPassword":$("#oldPassword").val(),
+			 "newPassword":$("#newPassword").val()})
+	.success(function(data){
+		if(!data || data.code != "1"){
+			swalerror(data.msg,"修改密码");
+		}else{
+			swalsucc(data.msg,"修改密码");
+			$("#changePassModal").modal("hide");
+		}
+	})
+}
+</script>
+<div class="row border-bottom">
+    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <span minimaliza-sidebar></span>
+        </div>
+        <ul class="nav navbar-top-links navbar-right">
+            <li>
+                <a href="javascript:void(0)" onclick="modifyPass()">
+                    <i class="fa fa-user-plus"></i> 修改密码
+                </a>
+            </li>
+            <li>
+                <a href="javascript:void(0)" ng-click="logout()">
+                    <i class="fa fa-sign-out"></i> 登出
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <div class="modal inmodal fade" id="changePassModal" tabindex="-1" role="dialog"  aria-hidden="true">
+	        <div class="modal-dialog modal-sm">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	                    <i class="fa fa-user-secret modal-icon"></i>
+	                    <h4 class="modal-title">修改密码</h4>
+	                </div>
+	                <div class="modal-body">
+							<form name="changePassForm" class="bs-example bs-example-form" role="form">
+							<input type="hidden" class="form-control" placeholder="Id" ng-model="modUser.userId" />
+								<div class="input-group">
+									<span class="input-group-addon"><font color="gray" size="1">密码只能由数字和字母组成</font></span>
+								</div>
+								<div class="input-group">
+									<span class="input-group-addon">原  密  码:</span> 
+									<input type="text" maxlength="8" id="oldPassword" name="oldPassword" class="form-control" placeholder="请输入原密码" ng-model="oldPassword" required/>
+								</div>
+								<br>
+								<div class="input-group">
+									<span class="input-group-addon">新  密  码:</span> 
+									<input type="text" maxlength="8" id="newPassword" name="newPassword" class="form-control" placeholder="请输入新密码" ng-model="newPassword" ng-keyup="test()" required/>
+								</div>
+								<br>
+								<div class="input-group">
+									<span class="input-group-addon">重复密码:</span> 
+									<input type="text" maxlength="8" name="confirmPassword" class="form-control" placeholder="请重复新密码" ng-model="confirmPassword" required/>
+								</div>
+							</form>
+					</div>
+	                <div class="modal-footer">
+	                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+	                    <button type="button" class="btn btn-primary"
+	                    ng-disabled="changePassForm.oldPassword.$invalid || changePassForm.newPassword.$invalid || confirmPassword != newPassword || !validPass"
+	                    onclick="modifyUserPass()">确定</button>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+</div>

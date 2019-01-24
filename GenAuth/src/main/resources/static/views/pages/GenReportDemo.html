@@ -1,0 +1,112 @@
+<meta charset="utf-8">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                  <div class="row">
+					<div class="col-sm-9 m-b-xs" style="overflow:hidden">
+					    <div class="input-daterange input-group" id="datepicker" style="float:left">
+				    		<span class="input-group-addon">日期</span>
+					        <input type="text" class="input-sm form-control" id="starttime" name="starttime" value="" ng-model="starttime"/>
+					        <span class="input-group-addon">到</span>
+					        <input type="text" class="input-sm form-control" id="endtime" name="endtime" value="" ng-model="endtime"/>
+						 </div>
+					</div>
+					<div class="col-sm-3">
+						<div class="input-group" style="padding-right:50%">
+							 <span class="input-group-btn">
+								<button type="button" class="btn btn-sm btn-primary" ng-if="userPages.testGen1_query">
+									查询</button>
+							</span>
+							 <span class="input-group-btn">
+								<button type="button" class="btn btn-sm btn-primary" ng-if="userPages.testGen1_export">
+									导出</button>
+							</span>
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-sm btn-primary" onclick="snapshot()">
+									快照</button>
+							</span>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th style="word-break: keep-all;white-space:nowrap;">用户ID</th>
+								<th style="word-break: keep-all;white-space:nowrap;" ng-if="userPages.testGen1_query">用户名</th>
+								<th style="word-break: keep-all;white-space:nowrap;" ng-if="userPages.testGen1_query">用户姓名</th>
+								<th style="word-break: keep-all;white-space:nowrap;">注册时间</th>
+								<th style="word-break: keep-all;white-space:nowrap;">最近登陆时间</th>
+								<th style="word-break: keep-all;white-space:nowrap;">余额</th>								
+							</tr>
+						</thead>	
+						<tbody>	
+							<tr ng-repeat="page in pages">
+							    <td><label class="label label-primary">{{ $index + 1 }}</label></td>
+							    <td>{{ page.user_id }}</td>
+								<td ng-if="userPages.testGen1_query">{{ page.name }}</td>
+								<td ng-if="userPages.testGen1_query">{{ page.reality_name }}</td>
+								<td>{{ page.reg_time }}</td>
+								<td>{{ page.last_login_time }}</td>
+								<td>{{ page.balance }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<nav>
+				  <ul class="pager">
+				    <li><a href="javascript:void(0)" ng-click="usersfxg.paginationClick('left')">上一页</a></li>
+				    <li><a href="javascript:void(0)" ng-click="usersfxg.paginationClick('right')">下一页</a></li>
+				  </ul>
+				</nav>
+                <pre>当前页:{{ usersfxg.bigCurrentPage  }}&nbsp;&nbsp;&nbsp;总页数:{{ usersfxg.totalPageCount }}&nbsp;&nbsp;&nbsp;总记录数:{{ usersfxg.totalCount }}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+  var pageBean={};//分页工具
+
+  //日期插件设置
+  var dateInit=function(){
+	$('.input-daterange').datepicker({
+		format:"yyyymmdd",
+	    keyboardNavigation: false,
+	    forceParse: true,
+	    autoclose: true,
+    });
+  }
+
+  //页面初始函数
+  var pageload=function(){
+	  dateInit();
+	  loadinfo();
+  }   
+  
+  //数据加载和渲染
+  var loadinfo=function(){
+	$scope.pages=[{"user_id":1,"name":"name1","reality_name":"realName1","reg_time":"20171010","last_login_time":"20170910","balance":100},
+	              {"user_id":2,"name":"name2","reality_name":"realName2","reg_time":"20171010","last_login_time":"20170910","balance":100},
+	              {"user_id":3,"name":"name3","reality_name":"realName3","reg_time":"20171010","last_login_time":"20170910","balance":100},
+	              {"user_id":4,"name":"name4","reality_name":"realName4","reg_time":"20171010","last_login_time":"20170910","balance":100},
+	              {"user_id":5,"name":"name5","reality_name":"realName5","reg_time":"20171010","last_login_time":"20170910","balance":100},
+	              {"user_id":6,"name":"name6","reality_name":"realName6","reg_time":"20171010","last_login_time":"20170910","balance":100},
+	              {"user_id":7,"name":"name7","reality_name":"realName7","reg_time":"20171010","last_login_time":"20170910","balance":100},
+	              {"user_id":8,"name":"name8","reality_name":"realName8","reg_time":"20171010","last_login_time":"20170910","balance":100},
+	              {"user_id":9,"name":"name9","reality_name":"realName9","reg_time":"20171010","last_login_time":"20170910","balance":100},
+	              {"user_id":10,"name":"name10","reality_name":"realName10","reg_time":"20171010","last_login_time":"20170910","balance":100},
+	              {"user_id":11,"name":"name11","reality_name":"realName11","reg_time":"20171010","last_login_time":"20170910","balance":100},
+	              {"user_id":12,"name":"name12","reality_name":"realName12","reg_time":"20171010","last_login_time":"20170910","balance":100}];//数据集合
+	$scope.starttime="20171017";//开始时间
+    $scope.endtime="20171018";//结束时间
+    angula.totalPageCount=10;//总页数
+  	angula.totalCount=100;//总记录数
+  	angula.bigCurrentPage = 1; //当前页
+  }
+</script>

@@ -1,0 +1,221 @@
+<meta charset="utf-8">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                  <div class="row">
+						<div class="col-sm-9 m-b-xs" style="overflow:auto">
+						    <div class="input-group" style="float:left">
+							        <span class="input-group-addon">菜单名称</span>
+							        <input type="text" class="input-sm" id="q_menu_name"  value="" ng-model="cond.name"/>
+							        <span class="input-group-addon">菜单Code</span>
+							        <input type="text" class="input-sm" id="q_menu_code"  value="" ng-model="cond.menuCode"/>
+							        <span class="input-group-addon">父级菜单</span>
+							        <input type="text" class="input-sm" id="q_menu_parent"  value="" ng-model="cond.parent"/>
+							 </div>
+						</div>
+						<div class="col-sm-3">
+							<div class="input-group" >
+								 <span class="input-group-btn">
+									<button type="button" class="btn btn-sm btn-primary" onclick="loadinfo()">
+										查询</button>
+								</span>
+								<span class="input-group-btn">
+									<button type="button" class="btn btn-sm btn-primary" ng-click="opennew()">
+										新增</button>
+								</span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12" style="overflow:auto">
+							<h6><small><font size="1" color="red">
+								住:涉及系统权限基础数据，需由管理员进行维护.另外，页面的控件权限目前直接写死的查询和导出两个权限，以后有时间可以再改成配置管理的。
+							</font></small></h6>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>操作</th>
+								<th>菜单ID</th>
+								<th>菜单名</th>
+								<th>菜单路径</th>
+								<th>菜单Code</th>
+								<th>后台权限Code</th>
+								<th>敏感数据Code</th>
+								<th>父级菜单</th>								
+								<th>菜单级别</th>								
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="menu in menus">
+								<td><a class="label label-primary" ng-click="deleteMenu(menu)" title="删除菜单"><i class="fa fa-minus-square-o" aria-hidden="true"></i></a>
+								<a class="label label-primary" ng-click="showMenuInfo(menu)" title="修改菜单"><i class="fa fa-pencil-square-o"/></a></td>
+							    <td><label class="label label-default">{{ menu.menuId }}</label></td>
+							    <td>{{ menu.name }}</td>
+								<td>{{ menu.statePath }}</td>
+								<td>{{ menu.menuCode }}</td>
+								<td>{{ menu.controllerCode }}</td>
+								<td>{{ menu.pageCode }}</td>
+								<td>{{ menu.parent }}</td>								
+								<td>{{ menu.menuLevel }}</td>								
+							</tr>
+						</tbody>
+					</table>
+				</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal inmodal fade" id="modifyModal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">菜单ID：{{ menu.menuId }}</h4>
+			</div>
+			<div class="modal-body">
+				<form class="bs-example bs-example-form" ng-app="menuForm" role="form">
+					<input type="hidden" class="form-control" ng-model="menu.menuId" />
+					<div class="input-group">
+						<span class="input-group-addon">name:</span>
+						<input type="text" class="form-control" ng-model="menu.name" AutoComplete="off" required />
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">statePath:</span>
+						<input type="text" class="form-control" ng-model="menu.statePath" ng-change="formatCode()" required />
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">menuCode:</span>
+						<input type="text" class="form-control" ng-model="menu.menuCode" required />
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon">controllerCode:</span>
+						<input type="text" class="form-control" ng-model="menu.controllerCode" required />
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon">pageCode:</span>
+						<input type="text" class="form-control" ng-model="menu.pageCode"/>
+						<!-- label class="form-control"><small><font color="red">
+							目前以menuCode代替使用,为以后页面控件配置多个权限参数预留。
+						</font></small></label -->
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon">parent:</span>
+						<input type="text" class="form-control" ng-model="menu.parent"  ng-change="changeLevel()"/>
+					</div><br>
+					<div class="input-group">
+						<span class="input-group-addon">menuLevel:</span>
+						<input type="text" class="form-control" readOnly="readOnly" ng-model="menu.menuLevel"/>
+					</div><br>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary" ng-disabled=""
+					ng-click="modifyMenu()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+  //页面初始函数
+  var pageload=function(){
+	  $scope.menus = {};
+	  $scope.menu = {};
+	  $scope.cond = {};
+	  loadinfo();
+	  
+	  $scope.changeLevel = function(){
+		  if($scope.menu.parent=="root"){
+			  $scope.menu.menuLevel=1;
+		  }else{
+			  $scope.menu.menuLevel=2;
+		  }
+	  }
+	  $scope.modifyMenu = function(){
+		  swal({
+				title:"修改菜单",
+				text:"确认修改菜单信息",
+				type: "info",
+		        showCancelButton: true,
+		        cancelButtonText:"关闭",
+		        confirmButtonColor: "#DD6B55",
+		        confirmButtonText: "确认",
+		        closeOnConfirm: false,
+		        closeOnCancel: false
+			},function(){
+				$http.post("PlatMenuManageAction/updateMenu.do",$scope.menu)
+				  .success(function(data){
+					  swalsucc(data.desc);
+					  $scope.menu = {};
+					  $("#modifyModal").modal("hide");
+					  loadinfo();
+				  })
+			})
+		  
+	  }
+	  $scope.deleteMenu = function(menu){
+		  swal({
+				title:"删除菜单",
+				text:"删除菜单同时会删除所有该菜单的用户权限，并且目前删除后无法恢复，需要确认删除吗？",
+				type: "warning",
+		        showCancelButton: true,
+		        cancelButtonText:"关闭",
+		        confirmButtonColor: "#DD6B55",
+		        confirmButtonText: "确认",
+		        closeOnConfirm: true
+			},function(){
+				$http.post("PlatMenuManageAction/deleteMenu.do",menu)
+				  .success(function(data){
+					  swalsucc(data.desc);
+					  loadinfo();
+				  })
+			})
+	  }
+	  
+	  $scope.showMenuInfo = function(menu){
+		  $scope.menu = menu;
+		  $("#modifyModal").modal("show");
+	  }
+	  
+	  $scope.opennew = function(){
+		  $scope.menu = {};
+		  $("#modifyModal").modal("show");
+	  }
+	  
+	  $scope.formatCode = function(){
+		  if($scope.menu.statePath && $scope.menu.statePath.indexOf(".")>=0){
+			  $scope.menu.parent=$scope.menu.statePath.split(".")[0];
+			  //稍微改一改 支持多级statePath路径
+//			  $scope.menu.menuCode=$scope.menu.statePath.split(".")[1];
+			  $scope.menu.menuCode=$scope.menu.statePath.substring($scope.menu.statePath.lastIndexOf(".")+1);
+			  $scope.changeLevel();
+		  }
+	  }
+  }   
+  
+  //数据加载和渲染
+  var loadinfo=function(){
+	  $http.post("PlatMenuManageAction/queryMenu.do",$scope.cond)
+	  .success(function(data){
+		  $scope.menus = data.queryRes;
+	  })
+  }
+</script>

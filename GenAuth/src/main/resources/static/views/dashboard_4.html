@@ -1,0 +1,506 @@
+<meta charset="utf-8">
+<style>
+.navli{
+	padding-left:52px;
+	position:relative;
+}
+</style>
+<div class="gray-bg">
+	<div class="row">
+		<div class="col-lg-4">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						选择用户 
+					</h5>
+					&nbsp;&nbsp;&nbsp;&nbsp;<input  placeholder="请输入用户名" type="text" id="queryName" style="width:40%"></input>&nbsp;&nbsp;<a ng-click="queryUser()">搜索</a>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div id="userDiv" class="form-group">
+	                    <div class="radio radio-primary" ng-repeat="user in allUser">
+	                        <input type="radio" name="user" value="{{ user }}" id="{{ user.userId }}" ng-click="chooseUser()" ng-model="menuAuth.user" /> <label for="{{ user.userId }}">{{ user.userRealname }}</label>
+	                    </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-6">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>选择赋予的菜单权限</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link" data-toggle="dropdown"> <i class="fa fa-chevron-up"></i>
+						</a> 
+					</div>
+				</div>
+				<div class="ibox-content">
+					<div id="menuDiv" class="sidebar-collapse">
+						<ul side-navigation class="nav">
+							<li style="background: #ffffff"><a href=""> <i
+									class="fa fa-support" style="color: #232323"></i> <span
+									style="color: #232323">平台管理</span> <span class="fa arrow"></span>
+							</a>
+								<ul>
+									<li style="list-style: none;"><div
+											class="checkbox checkbox-info checkbox-circle">
+											<input parent="platmanage" type="checkbox"
+												ng-model="menus.usermanage" ng-true-value="true"
+												ng-false-value="false" /><label>用户管理</label>
+										</div></li>
+								</ul></li>
+							<li style="background: #ffffff"><a href=""> <i
+									class="fa fa-line-chart" style="color: #232323"></i> <span
+									style="color: #232323">平台数据</span> <span class="fa arrow"></span>
+							</a>
+								<ul>
+									<li ng-repeat="menu in platdata" style="list-style: none;">
+										<div
+											class="checkbox checkbox-info checkbox-circle checkbox-inline"
+											style="width: 30%">
+											<input parent="platdata" type="checkbox"
+												ctrl="{{ menu.controllerCode}}"
+												ng-model="$parent.menus[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>{{ menu.name }}</label>
+										</div>
+										<div
+											class="checkbox checkbox-warning checkbox-circle checkbox-inline">
+											&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"
+												value="{{ menu.menuCode }}" class="pageAuth"
+												ng-model="$parent.pages[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>敏感数据</label>
+										</div>
+									</li>
+								</ul></li>
+							<li style="background: #ffffff"><a href=""><i
+									class="fa fa-bar-chart-o" style="color: #232323"></i> <span
+									style="color: #232323">用户数据</span> <span class="fa arrow"></span></a>
+								<ul>
+									<li ng-repeat="menu in userdata" style="list-style: none;">
+										<div
+											class="checkbox checkbox-info checkbox-circle checkbox-inline"
+											style="width: 30%">
+											<input parent="userdata" type="checkbox"
+												ctrl="{{ menu.controllerCode}}"
+												ng-model="$parent.menus[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>{{ menu.name }}</label>
+										</div>
+										<div
+											class="checkbox checkbox-warning checkbox-circle checkbox-inline">
+											&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"
+												value="{{ menu.menuCode }}" class="pageAuth"
+												ng-model="$parent.pages[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>敏感数据</label>
+										</div>
+									</li>
+								</ul></li>
+							<li style="background: #ffffff"><a href=""> <i
+									class="fa fa-database" style="color: #232323"></i> <span
+									style="color: #232323">运营数据</span><span class="fa arrow"></span></a>
+								<ul>
+									<li ng-repeat="menu in rundata" style="list-style: none;">
+										<div
+											class="checkbox checkbox-info checkbox-circle checkbox-inline"
+											style="width: 30%">
+											<input parent="rundata" type="checkbox"
+												ctrl="{{ menu.controllerCode}}"
+												ng-model="$parent.menus[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>{{ menu.name }}</label>
+										</div>
+										<div
+											class="checkbox checkbox-warning checkbox-circle checkbox-inline">
+											&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"
+												value="{{ menu.menuCode }}" class="pageAuth"
+												ng-model="$parent.pages[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>敏感数据</label>
+										</div>
+									</li>
+								</ul></li>
+							<li style="background: #ffffff"><a href=""> <i
+									class="fa fa-bank" style="color: #232323"></i> <span
+									style="color: #232323">他他乐商城数据</span><span class="fa arrow"></span></a>
+								<ul>
+									<li ng-repeat="menu in proddata" style="list-style: none;">
+										<div
+											class="checkbox checkbox-info checkbox-circle checkbox-inline"
+											style="width: 30%">
+											<input parent="proddata" type="checkbox"
+												ctrl="{{ menu.controllerCode}}"
+												ng-model="$parent.menus[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>{{ menu.name }}</label>
+										</div>
+										<div
+											class="checkbox checkbox-warning checkbox-circle checkbox-inline">
+											&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"
+												value="{{ menu.menuCode }}" class="pageAuth"
+												ng-model="$parent.pages[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>敏感数据</label>
+										</div>
+									</li>
+								</ul></li>
+
+							<li style="background: #ffffff"><a href=""> <i
+									class="fa fa-bank" style="color: #232323"></i> <span
+									style="color: #232323">活动数据</span><span class="fa arrow"></span></a>
+								<ul>
+									<li ng-repeat="menu in activedata">
+										<div
+											class="checkbox checkbox-info checkbox-circle checkbox-inline"
+											style="width: 30%">
+											<input parent="activedata" type="checkbox"
+												ctrl="{{ menu.controllerCode}}"
+												ng-model="$parent.menus[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>{{ menu.name }}</label>
+										</div>
+										<div
+											class="checkbox checkbox-warning checkbox-circle checkbox-inline">
+											&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"
+												value="{{ menu.menuCode }}" class="pageAuth"
+												ng-model="$parent.pages[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>敏感数据</label>
+										</div>
+									</li>
+								</ul></li>
+							<li style="background: #ffffff"><a href=""> <i
+									class="fa fa-th-list" style="color: #232323"></i> <span
+									style="color: #232323">其他数据</span><span class="fa arrow"></span></a>
+								<ul>
+									<li ng-repeat="menu in outfare">
+										<div
+											class="checkbox checkbox-info checkbox-circle checkbox-inline"
+											style="width: 30%">
+											<input parent="outfare" type="checkbox"
+												ctrl="{{ menu.controllerCode}}"
+												ng-model="$parent.menus[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>{{ menu.name }}</label>
+										</div>
+										<div
+											class="checkbox checkbox-warning checkbox-circle checkbox-inline">
+											&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox"
+												value="{{ menu.menuCode }}" class="pageAuth"
+												ng-model="$parent.pages[menu.menuCode]" ng-true-value="true"
+												ng-false-value="false" /><label>敏感数据</label>
+										</div>
+									</li>
+								</ul></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-2">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<h5>
+						操作区
+					</h5>
+					<div class="ibox-tools">
+						<a class="collapse-link">
+                            <i class="fa fa-chevron-up"></i>
+                        </a>
+					</div>
+				</div>
+				<div class="ibox-content">
+					<button class="btn btn-sm btn-primary" ng-click="confirmAuth()">提交权限</button>
+					<button class="btn btn-sm btn-primary" ng-click="openCreatePage()">新增用户</button>
+					<button class="btn btn-sm btn-primary" ng-click="openModifyPage()">修改用户</button>
+					<button class="btn btn-sm btn-primary" ng-click="deleteUser()">删除用户</button>
+				</div>
+			</div>
+		</div>
+		
+		<div class="modal inmodal fade" id="userModal" tabindex="-1" role="dialog"  aria-hidden="true">
+	        <div class="modal-dialog modal-sm">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	                    <i class="fa fa-laptop modal-icon"></i>
+	                    <h4 class="modal-title">{{ modUser.title }}</h4>
+	                </div>
+	                <div class="modal-body">
+							<form class="bs-example bs-example-form" role="form">
+							<input type="hidden" class="form-control" placeholder="Id" ng-model="modUser.userId" />
+								<div class="input-group">
+									<span class="input-group-addon">账户:</span> 
+									<input type="text" id="userName" class="form-control" placeholder="账户名" ng-model="modUser.userName" />
+								</div>
+								<br>
+								<div class="input-group">
+									<span class="input-group-addon">姓名:</span> 
+									<input type="text" class="form-control" placeholder="姓名" ng-model="modUser.userRealname" />
+								</div>
+								<br>
+								<div class="input-group" ng-show="modUser.modType=='add'">
+									<span class="input-group-addon">密码:</span> 
+									<input type="text" class="form-control" value="默认为123456" disabled="disabled" />
+								</div>
+								<div class="input-group" ng-show="modUser.modType=='mod'">
+									<span class="input-group-addon">密码:</span> 
+									<div class="checkbox checkbox-info checkbox-circle">
+										<input type="checkbox" ng-model="modUser.resetPass" ng-true-value="true" ng-false-value="false"/>
+										<label>重置为123456</label>
+									</div>
+								</div>
+							</form>
+					</div>
+	                <div class="modal-footer">
+	                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+	                    <button type="button" class="btn btn-primary" ng-click="modifyUser()">确定</button>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+<script>
+	var pageload = function() {
+		$scope.menuAuth = {};//保存选择结果
+		$scope.menus = {};//保存所选用户已有的菜单权限
+		$scope.modUser = {};//保存修改用户的信息
+		$scope.pages = {};//保存所选用户已有的页面权限
+		//Collapse ibox function
+		$('.collapse-link').click(function() {
+			var ibox = $(this).closest('div.ibox');
+			var button = $(this).find('i');
+			var content = ibox.find('div.ibox-content');
+			content.slideToggle(200);
+			button.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
+			ibox.toggleClass('').toggleClass('border-bottom');
+			setTimeout(function() {
+				ibox.resize();
+				ibox.find('[id^=map-]').resize();
+			}, 50);
+		});
+		//选中用户
+		$scope.chooseUser = function(){
+			if($scope.menuAuth.user){
+				$scope.menus={};
+				$scope.pages = {};
+				var userInfo = eval("("+$scope.menuAuth.user+")");
+				var userMenus = userInfo.userMenucode.split("|");
+				for(var i = 0 ; i < userMenus.length;i++){
+					if(userMenus[i]){
+						$scope.menus[userMenus[i]] = true;	
+					}
+				}
+				if(userInfo.userPagecode){
+					var userPages = userInfo.userPagecode.split("|");
+					for(var i = 0 ; i < userPages.length;i++){
+						if(userPages[i]){
+							$scope.pages[userPages[i]] = true;	
+						}
+					}	
+				}
+			}
+		}
+		//搜索用户
+		$scope.queryUser = function(){
+			var queryUser =  $("#queryName").val();//post请求的中文转utf-8编码，在config.js中已经进行了转码。
+			//加载用户列表
+			$http.post("userManage/queryUser.do",{"userName":queryUser}).success(function(data) {
+				$scope.allUser={};
+				if (data.length > 0) {
+					$scope.allUser = data;
+				}
+			});
+		}
+		//加载用户列表
+		$http.post("userManage/queryUser.do").success(function(data) {
+			if (data.length > 0) {
+				$scope.allUser = data;
+			}
+		});
+		//加载子菜单
+		$http.post("userManage/querySubMenu.do").success(function(data) {
+			$scope.platdata = data.platdata;
+			$scope.userdata = data.userdata;
+			$scope.rundata = data.rundata;
+			$scope.proddata = data.proddata;
+			$scope.activedata = data.activedata;
+			$scope.outfare = data.outfare;
+		});
+		//提交权限
+		$scope.confirmAuth = function(){
+			if(!$scope.menuAuth.user){
+				swalerror("请选择用户","提交权限");
+				return false;
+			}else if(!$scope.menus || $scope.menus.length<1){
+				swalerror("需要至少选择一个菜单","提交权限");
+				return false;
+			}
+			var userInfo = eval("("+$scope.menuAuth.user+")");
+			var userId = userInfo.userId;
+			var userMenucode = "|";
+			var userPagecode = "|";
+			var userMenus = $scope.menus;
+			var userPages = $scope.pages;
+			for(var menu in userMenus){
+				if(userMenus[menu]){
+					userMenucode = userMenucode+menu+"|";
+				}
+			}
+			/*for(var page in userPages){
+				if(userPages[page]){
+					userPagecode = userPagecode+page+"|";
+				}
+			}*/
+			
+			
+			//首页必须配置上
+			//首页配置了不参与权限判断， 这里可以不用配上了。
+			if(userMenucode.indexOf("|layouts|")<0){
+				userMenucode = userMenucode+"layouts|";
+			}
+			//配置四个父菜单
+			if($("input[parent='platdata']:checked").size()>0){
+				if(userMenucode.indexOf("|platdata|")<0){
+					userMenucode=userMenucode+"platdata|"	
+				}
+			}else{
+				userMenucode=userMenucode.replace(/platdata\|/g,"");
+			}
+			if($("input[parent='userdata']:checked").size()>0){
+				if(userMenucode.indexOf("|userdata|")<0){
+					userMenucode=userMenucode+"userdata|"	
+				}
+			}else{
+				userMenucode=userMenucode.replace(/userdata\|/g,"");
+			}
+			if($("input[parent='rundata']:checked").size()>0){
+				if(userMenucode.indexOf("|rundata|")<0){
+					userMenucode=userMenucode+"rundata|"	
+				}
+			}else{
+				userMenucode=userMenucode.replace(/rundata\|/g,"");
+			}
+			if($("input[parent='outdata']:checked").size()>0){
+				if(userMenucode.indexOf("|outdata|")<0){
+					userMenucode=userMenucode+"outdata|"	
+				}
+			}else{
+				userMenucode=userMenucode.replace(/outdata\|/g,"");
+			}
+			if($("input[parent='proddata']:checked").size()>0){
+				if(userMenucode.indexOf("|proddata|")<0){
+					userMenucode=userMenucode+"proddata|"	
+				}
+			}else{
+				userMenucode=userMenucode.replace(/proddata\|/g,"");
+			}
+			if($("input[parent='activedata']:checked").size()>0){
+				if(userMenucode.indexOf("|activedata|")<0){
+					userMenucode=userMenucode+"activedata|"	
+				}
+			}else{
+				userMenucode=userMenucode.replace(/activedata\|/g,"");
+			}
+			//alert(userMenucode);
+			var userControllercode = "|";
+			$("#menuDiv input[parent]:checked").each(function(i,obj){
+				if($(this).attr("ctrl")){
+					userControllercode += $(this).attr("ctrl")+"|";	
+				}
+			});
+			$("#menuDiv input.pageAuth:checked").each(function(i,obj){
+				if($(this).val()){
+					userPagecode += $(this).val()+"|";	
+				}
+			});
+			
+			var config = {params:{"userId":userId,"userMenucode":userMenucode,"userPagecode":userPagecode,"userControllercode":userControllercode}};
+			$http.get("userManage/updateMenu.do",config)
+			.success(function(data){
+				swalsucc(data.msg,"提交权限");
+				$scope.menuAuth = {};//保存选择结果
+				$scope.menus = {};//保存所选用户已有的菜单权限
+				$scope.pages = {};
+				$("#queryName").val("");
+				$scope.queryUser();
+			})
+		}
+		//删除用户
+		$scope.deleteUser = function(){
+			if(!$scope.menuAuth.user){
+				swalerror("请选择要删除的用户","删除用户");
+				return false;
+			}else{
+				var userInfo = eval("("+$scope.menuAuth.user+")");
+				var userId = userInfo.userId;
+				var userRealname = userInfo.userRealname;
+				swal({
+					title:"删除用户",
+					text:"确认删除用户 "+userRealname+" ?",
+					type: "warning",
+	                showCancelButton: true,
+	                cancelButtonText:"关闭",
+	                confirmButtonColor: "#DD6B55",
+	                confirmButtonText: "确认",
+	                closeOnConfirm: false
+				},function(){
+					$http.post("userManage/deleteUser.do",{"userId":userId})
+					.success(function(data){
+						swalsucc(data.msg,"删除用户");
+						$("#queryName").val("");
+						$scope.queryUser();
+					})
+				})
+			}
+		}
+		//新增用户
+		$scope.openCreatePage = function(){
+			$scope.modUser = {};
+			$scope.modUser.title="新增用户";
+			$scope.modUser.modType="add";
+			$("#userName").removeAttr("readOnly");
+			$("#userModal").modal("show");
+		}
+		//修改用户
+		$scope.openModifyPage = function(){
+			if(!$scope.menuAuth.user){
+				swalerror("请选择用户","修改用户");
+				return false;
+			}
+			var userInfo = eval("("+$scope.menuAuth.user+")");
+			$scope.modUser = userInfo;
+			$scope.modUser.title="修改用户";
+			$scope.modUser.modType="mod";
+			$("#userName").attr("readOnly","readOnly");
+			$("#userModal").modal("show");
+		}
+		//修改
+		$scope.modifyUser = function(){
+			if(!$scope.modUser.title){
+				swalerror("请重新打开页面","用户修改");
+			}else if(!$scope.modUser.userName || !$scope.modUser.userRealname){
+				swalerror("请录入账号和姓名","用户修改");
+			}else{
+				swal({
+					title:"修改用户",
+					text:"确认修改该用户信息吗 ?",
+					type: "warning",
+	                showCancelButton: true,
+	                confirmButtonColor: "#DD6B55",
+	                confirmButtonText: "确认",
+	                closeOnConfirm: false
+				},function(){
+					$http.post("userManage/modifyUser.do",$scope.modUser)
+					.success(function(data){
+						if(data.code && data.code == "1"){
+							swalsucc(data.msg,"用户信息修改完成。");
+							$("#userModal").modal("hide");			
+							$("#queryName").val("");
+							$scope.queryUser();
+						}else{
+							swalerror(data.msg,"用户修改失败。")
+						}
+						
+					})
+				})
+			}
+		}
+	}
+</script>

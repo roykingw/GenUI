@@ -1,0 +1,579 @@
+<meta charset="utf-8">
+<style>
+.navli{
+	padding-left:52px;
+	position:relative;
+}
+</style>
+<div class="gray-bg">
+	<div class="row">
+		<!-- 用户管理模块 -->
+		<div class="col-md-4">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title with-board">
+					<i class="fa fa-fw fa-user"></i> <label class="box-title"> 用户</label>
+	                <input  placeholder="请输入用户名" type="text" id="queryName" style="width:40%"></input>&nbsp;&nbsp;<a ng-click="queryUser()">搜索</a>
+	                <div class="box-tools pull-right">
+	                    <i class="fa fa-fw fa-times-circle fa-spin toolbar-icon" ng-click="openCreatePage()" title="新增用户"></i>&nbsp;&nbsp;
+	                    <i class="fa fa-edit toolbar-icon" ng-click="openModifyPage()" title="修改用户"></i>&nbsp;&nbsp;
+	                    <i class="fa fa-fw fa-user-times toolbar-icon" ng-click="deleteUser()" title="删除用户"></i>&nbsp;&nbsp;
+	                    <i class="fa fa-fw fa-check-circle toolbar-icon" ng-click="confirmUR()" title="授予角色"></i>&nbsp;&nbsp;
+	                </div>
+				</div>
+				<div class="ibox-content">
+					<div id="userDiv" class="form-group alert alert-info">
+	                    <div class="radio radio-primary" ng-repeat="user in allUser">
+	                        <input type="radio" name="user" value="{{ user }}" id="{{ 'user'+user.userId }}" ng-click="chooseUser(user)" ng-model="pageRes.user" /> <label class="label-primary" for="{{ 'user'+user.userId }}">{{ user.userRealname }}</label>
+	                    </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+		<!-- 角色管理模块 -->
+		<div class="col-md-3">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title with-board">
+					<label class="box-title"> 角色</label>
+	                <div class="box-tools pull-right">
+	                    <i class="fa fa-fw fa-times-circle fa-spin toolbar-icon" ng-click="openCreateRole()" title="新增角色"></i>&nbsp;&nbsp;
+	                    <i class="fa fa-fw fa-user-times toolbar-icon" ng-click="deleteRole()" title="删除角色"></i>&nbsp;&nbsp;
+	                    <i class="fa fa-fw fa-check-circle toolbar-icon" ng-click="confirmRA()" title="授予权限"></i>&nbsp;&nbsp;
+	                </div>
+				</div>
+				<div class="ibox-content">
+					<div id="roleDiv" class="form-group alert alert-info">
+	                    <div class="checkbox checkbox-info checkbox-circle" ng-repeat="role in allRole">
+	                        <!-- input type="radio" name="{{role.roleId}}" value="{{ role }}" id="{{ role.roleId }}" ng-model="menuAuth.role" />
+							<label for="{{ role.roleId }}">{{ role.roleName }}</label>
+							 -->
+							<input type="checkbox" id="{{ 'role'+role.roleId}}" ng-click="chooseRole()" ng-model="chosenRoles[role.roleId]" ng-true-value="true"
+								ng-false-value="false" /><label class="label-primary" for="{{ 'role'+role.roleId}}">{{ role.roleName}}</label>
+	                    </div>
+                    </div>
+				</div>
+			</div>
+		</div>
+		<!-- 菜单管理 -->
+		<div class="col-md-5">
+			<div class="ibox float-e-margins">
+				<div class="ibox-title">
+					<label class="box-title">菜单</label>
+				</div>
+				<div class="ibox-content">
+					<div id="menuDiv" class="sidebar-collapse alert alert-info">
+						<ul side-navigation class="nav" role="config">
+							<li style="background: #D9EDF7" parentMenuCode="0,manage, "><a href=""> 
+								<i class="fa fa-support" style="color: #232323"></i>
+								<span style="color: #232323">平台管理</span> <span class="fa arrow"></span>
+							</a>
+								<ul>
+									<li style="list-style: none;">
+										<div class="checkbox checkbox-info checkbox-circle">
+											<input type="checkbox" id="menu3"
+												menuInfo="-1,usermanage,UserManageAction"
+												ng-model="menus.usermanage" ng-true-value="true"
+												ng-false-value="false" /><label for="menu3">用户管理</label>
+										</div>
+									</li>
+									<li style="list-style: none;"><div
+											class="checkbox checkbox-info checkbox-circle">
+											<input parent="platmanage" type="checkbox" id="menu4"
+												menuInfo="-2,platUserManage,UserManageAction"
+												ng-model="menus.platUserManage" ng-true-value="true" 
+												ng-false-value="false" /><label class="label-primary" for="menu4">平台登陆用户</label>
+										</div></li>
+									<li style="list-style: none;"><div
+											class="checkbox checkbox-info checkbox-circle">
+											<input parent="platmanage" type="checkbox" id="menu5"
+												menuInfo="-3,platMenuManage,UserManageAction"
+												ng-model="menus.platMenuManage" ng-true-value="true"
+												ng-false-value="false" /><label class="label-primary" for="menu5">平台菜单</label>
+										</div></li>
+									<li style="list-style: none;"><div
+											class="checkbox checkbox-info checkbox-circle">
+											<input parent="platmanage" type="checkbox"
+												menuInfo="-4,druidManage, " id="menu6"
+												ng-model="menus.druidManage" ng-true-value="true"
+												ng-false-value="false" /><label class="label-primary" for="menu6">数据库性能监控</label>
+										</div></li>
+									<li style="list-style: none;"><div
+											class="checkbox checkbox-info checkbox-circle">
+											<input parent="platmanage" type="checkbox"
+												menuInfo="-5,realTimeLog,RealTimeLogController" id="menu7"
+												ng-model="menus.realTimeLog" ng-true-value="true"
+												ng-false-value="false" /><label class="label-primary" for="menu7">实时日志监控</label>
+										</div></li>
+								</ul></li>
+								
+								
+							<li style="background: #D9EDF7" ng-repeat="parentMenu in allMenu" parentMenuCode="{{ parentMenu.menuId+','+parentMenu.menuCode+', '}}">
+								<a href="">
+									<i class="fa fa-line-chart" style="color: #232323"></i>
+									<span style="color: #232323">{{ parentMenu.name}}</span> 
+									<span class="fa arrow"></span>
+								</a>
+								<ul>
+									<li ng-repeat="menu in parentMenu.subMenus" style="list-style: none;">
+										<div class="checkbox checkbox-info checkbox-circle checkbox-inline"
+											style="width: 30%">
+											<input type="checkbox" menuInfo=" {{ menu.menuId+','+menu.menuCode+','+menu.controllerCode }}"
+												ng-model="menus[menu.menuCode]" ng-true-value="true" id="{{ 'menu'+menu.menuId}}"
+												ng-false-value="false" /><label class="label-primary" for="{{ 'menu'+menu.menuId }}">{{ menu.name }}</label>
+										</div>
+										<div class="checkbox checkbox-warning checkbox-circle checkbox-inline">
+											&nbsp;&nbsp;<input type="checkbox" id="{{ 'pageQuery'+menu.menuId}}"
+												value="{{ menu.menuCode+'_query' }}" class="pageAuth"
+												ng-model="pages[menu.menuCode+'_query']" ng-true-value="true"
+												ng-false-value="false" /><label class="label-primary" for="{{ 'pageQuery'+menu.menuId}}">查询</label>
+											&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="{{ 'pageExport'+menu.menuId}}"
+												value="{{ menu.menuCode+'_export' }}" class="pageAuth"
+												ng-model="pages[menu.menuCode+'_export']" ng-true-value="true"
+												ng-false-value="false" /><label class="label-primary" for="{{ 'pageExport'+menu.menuId}}">导出</label>
+										</div>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- 用户新增修改模块 -->
+		<div class="modal inmodal fade" id="userModal" tabindex="-1" role="dialog"  aria-hidden="true">
+	        <div class="modal-dialog modal-sm">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	                    <i class="fa fa-laptop modal-icon"></i>
+	                    <h4 class="modal-title">{{ modUser.title }}</h4>
+	                </div>
+	                <div class="modal-body">
+							<form class="bs-example bs-example-form" role="form">
+							<input type="hidden" class="form-control" placeholder="Id" ng-model="modUser.userId" />
+								<div class="input-group">
+									<span class="input-group-addon">账户:</span> 
+									<input type="text" id="userName" class="form-control" placeholder="账户名" ng-model="modUser.userName" />
+								</div>
+								<br>
+								<div class="input-group">
+									<span class="input-group-addon">姓名:</span> 
+									<input type="text" class="form-control" placeholder="姓名" ng-model="modUser.userRealname" />
+								</div>
+								<br>
+								<div class="input-group" ng-show="modUser.modType=='add'">
+									<span class="input-group-addon">密码:</span> 
+									<input type="text" class="form-control" value="默认为123456" disabled="disabled" />
+								</div>
+								<div class="input-group" ng-show="modUser.modType=='mod'">
+									<span class="input-group-addon">密码:</span> 
+									<div class="checkbox checkbox-info checkbox-circle">
+										<input type="checkbox" ng-model="modUser.resetPass" ng-true-value="true" ng-false-value="false"/>
+										<label>重置为123456</label>
+									</div>
+								</div>
+							</form>
+					</div>
+	                <div class="modal-footer">
+	                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+	                    <button type="button" class="btn btn-primary" ng-click="modifyUser()">确定</button>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    <!-- 角色新增修改模块 -->
+		<div class="modal inmodal fade" id="roleModal" tabindex="-1" role="dialog"  aria-hidden="true">
+	        <div class="modal-dialog modal-sm">
+	            <div class="modal-content">
+	                <div class="modal-header">
+	                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	                    <i class="fa fa-laptop modal-icon"></i>
+	                    <h4 class="modal-title">{{ modRole.title }}</h4>
+	                </div>
+	                <div class="modal-body">
+							<form class="bs-example bs-example-form" role="form">
+								<div class="input-group">
+									<span class="input-group-addon">角色code:</span> 
+									<input type="text" id="userName" class="form-control" placeholder="角色code" ng-model="modRole.roleCode" />
+								</div>
+								<br>
+								<div class="input-group">
+									<span class="input-group-addon">角色名:</span> 
+									<input type="text" class="form-control" placeholder="角色名" ng-model="modRole.roleName" />
+								</div>
+							</form>
+					</div>
+	                <div class="modal-footer">
+	                    <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+	                    <button type="button" class="btn btn-primary" ng-click="modifyRole()">确定</button>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+</div>
+<script>
+	var loadinfo = function(){
+		$scope.pageRes = {};//保存选择结果
+		$scope.menus = {};//保存所选用户已有的菜单权限
+		$scope.modUser = {};//保存修改用户的信息
+		$scope.pages = {};//保存所选用户已有的页面权限
+		
+		//$scope.allUser = {}; 所有的用户
+		//$scope.allRole = {}; 所有的角色
+		//$scope.allMenu; 除平台管理菜单之外的其他所有菜单
+		$scope.chosenRoles = {} //保存所选的角色
+		//加载用户列表--done
+		$http.post("userManage/queryUser.do").success(function(data) {
+			if (data.length > 0) {
+				$scope.allUser = data;
+			}
+		});
+		//加载角色列表--done
+		$http.post("userManage/queryRole.do").success(function(data) {
+			if (data.length > 0) {
+				$scope.allRole = data;
+			}
+		});
+		//加载所有菜单--done
+		$http.post("userManage/querySubMenu.do").success(function(data) {
+			if (data.length > 0) {
+				$scope.allMenu = data;
+			}
+		});
+	}
+	
+	var pageload = function() {
+		loadinfo();
+		//选中用户--done
+		$scope.chooseUser = function(user){
+			$scope.chosenRoles={};
+			$scope.pages={};
+			$scope.menus={};
+			//更新用户所属角色
+			if(user.userRoles){
+				var roles= user.userRoles.split("|");
+				for(var i = 0 ; i < roles.length;i++){
+					if(roles[i]){
+						$scope.chosenRoles[roles[i]] = true;
+					}
+				}
+			}
+			//更新用户拥有菜单Code
+			if(user.userMenucode){
+				var menus= user.userMenucode.split("|");
+				for(var i = 0 ; i < menus.length;i++){
+					if(menus[i]){
+						$scope.menus[menus[i]] = true;
+					}
+				}
+			}
+			//更新用户拥有页面权限Code
+			if(user.userPagecode){
+				var pagecodes= user.userPagecode.split("|");
+				for(var i = 0 ; i < pagecodes.length;i++){
+					if(pagecodes[i]){
+						$scope.pages[pagecodes[i]] = true;
+					}
+				}
+			}
+		}
+		//选中角色--done
+		$scope.chooseRole=function(){
+			$scope.menus={};
+			$scope.pages={};
+			//菜单和页面权限取所选角色的合集
+			for(var i = 0;i < $scope.allRole.length;i++){
+				if($scope.chosenRoles[$scope.allRole[i].roleId]){
+					var menuCodes = $scope.allRole[i].menucode.split("|");
+					for(var j = 0 ; j < menuCodes.length;j++){
+						if(menuCodes[j]){
+							$scope.menus[menuCodes[j]] = true;
+						}
+					}
+					var pageCodes = $scope.allRole[i].pagecode.split("|");
+					for(var j = 0 ; j < pageCodes.length;j++){
+						if(pageCodes[j]){
+							$scope.pages[pageCodes[j]] = true;
+						}
+					}
+				}
+			}
+		}
+		//搜索用户
+		$scope.queryUser = function(){
+			var queryUser =  $("#queryName").val();//post请求的中文转utf-8编码，在config.js中已经进行了转码。
+			//加载用户列表
+			$http.post("userManage/queryUser.do",{"userName":queryUser}).success(function(data) {
+				$scope.allUser={};
+				$scope.chosenRoles={};
+				if (data.length > 0) {
+					$scope.allUser = data;
+				}
+			});
+		}
+		
+		//提交用户角色
+		$scope.confirmUR = function(){
+			if(!$scope.pageRes.user){
+				swalerror("请选择用户","提交用户角色");
+				return false;
+			}
+			var roles = "|";
+			for(var key in $scope.chosenRoles){
+				if(!$scope.chosenRoles[key]){
+					delete $scope.chosenRoles[key];
+				}else{
+					roles += key+"|";
+				}
+			}
+			if(!$scope.chosenRoles || $scope.chosenRoles.length<1){
+				swalerror("需要至少选择一个角色","提交用户角色");
+				return false;
+			}
+			var userInfo = eval("("+$scope.pageRes.user+")");
+			var userId = userInfo.userId;
+			swal({
+					title:"更新用户角色关系",
+					text:"确认修改该用户所属角色关系?",
+					type: "warning",
+	                showCancelButton: true,
+	                cancelButtonText:"关闭",
+	                confirmButtonColor: "#DD6B55",
+	                confirmButtonText: "确认",
+	                closeOnConfirm: false
+				},function(){
+					var config = {"userId":userId,"roles":roles};
+					$http.post("userManage/updateUR.do",config)
+					.success(function(data){
+						swalsucc("成功添加"+data+"条角色记录","更新用户所属角色");
+						$("#queryName").val("");
+						loadinfo();
+					})
+				})
+		}
+		
+		//提交角色权限
+		$scope.confirmRA = function(){
+			var role = "";
+			var count = 0 ; 
+			for(var key in $scope.chosenRoles){
+				if($scope.chosenRoles[key]){
+					role = key;
+					count ++;
+				}
+			}
+			//只能选择一个角色。
+			if(count < 1 || count > 1) {
+				swalerror("请选择一个要提交权限的角色","提交角色权限");
+				return false;
+			}
+			//可以是个空权限的角色
+			/*if(!$scope.menus || $scope.menus.length<1){
+				swalerror("需要至少选择一个菜单进行赋权","提交角色权限");
+				return false;
+			}*/
+			var updateMenus = "|";
+			//父菜单  查找有被选择了的子菜单的父菜单
+			$("#menuDiv li[parentMenuCode]").each(function(i,obj){
+				if($(obj).children("ul").children("li").children("div").children("input[menuInfo]:checked").length>0){
+					updateMenus += $(this).attr("parentMenuCode")+"|";
+				}
+			})			
+			/*for(var m in $scope.menus){
+				if($scope.menus[m]){
+					updateMenus += m+"|";
+				}
+			}*/
+			//子菜单
+			$("#menuDiv input[menuInfo]:checked").each(function(i,obj){
+				if($(this).attr("menuInfo")){
+					updateMenus += $(this).attr("menuInfo")+"|";	
+				}
+			});
+			
+			var updatePages = "|";
+			for(var p in $scope.pages){
+				if($scope.pages[p]){
+					updatePages += p+"|";
+				}
+			}
+			
+			swal({
+					title:"更新角色权限",
+					text:"确认修改该角色所属权限吗?",
+					type: "warning",
+	                showCancelButton: true,
+	                cancelButtonText:"关闭",
+	                confirmButtonColor: "#DD6B55",
+	                confirmButtonText: "确认",
+	                closeOnConfirm: false
+				},function(){
+					var config = {"role":role,"menus":updateMenus,"pages":updatePages};
+					$http.post("userManage/updateRA.do",config)
+					.success(function(data){
+						swalsucc("成功更新角色拥有的权限记录"+data+"条。更新的权限需要在用户重新登录后生效","更新角色拥有权限");
+						loadinfo();
+					})
+				})
+		}
+		
+		//删除用户--done
+		$scope.deleteUser = function(){
+			if(!$scope.pageRes.user){
+				swalerror("请选择要删除的用户","删除用户");
+				return false;
+			}else{
+				var userInfo = eval("("+$scope.pageRes.user+")");
+				var userId = userInfo.userId;
+				var userRealname = userInfo.userRealname;
+				swal({
+					title:"删除用户",
+					text:"确认删除用户 "+userRealname+" ?",
+					type: "warning",
+	                showCancelButton: true,
+	                cancelButtonText:"关闭",
+	                confirmButtonColor: "#DD6B55",
+	                confirmButtonText: "确认",
+	                closeOnConfirm: false
+				},function(){
+					$http.post("userManage/deleteUser.do",{"userId":userId})
+					.success(function(data){
+						swalsucc(data.msg,"删除用户");
+						$("#queryName").val("");
+						$scope.queryUser();
+					})
+				})
+			}
+		}
+		//删除角色
+		$scope.deleteRole = function(){
+			var roles = "|";
+			for(var key in $scope.chosenRoles){
+				if(!$scope.chosenRoles[key]){
+					delete $scope.chosen.Roles[key];
+				}else{
+					roles += key+"|";
+				}
+			}
+			if(!$scope.chosenRoles || $scope.chosenRoles.length<1){
+				swalerror("需要至少选择一个角色","提交用户角色");
+				return false;
+			}else{
+				swal({
+					title:"删除角色",
+					text:"确认删除这些角色吗 ?",
+					type: "warning",
+	                showCancelButton: true,
+	                cancelButtonText:"关闭",
+	                confirmButtonColor: "#DD6B55",
+	                confirmButtonText: "确认",
+	                closeOnConfirm: false
+				},function(){
+					$http.post("userManage/deleteRole.do",{"roles":roles})
+					.success(function(data){
+						swalsucc(data.msg,"删除角色");
+						loadinfo();
+					})
+				})
+			}
+		}
+		//打开新增用户弹出框--done
+		$scope.openCreatePage = function(){
+			$scope.modUser = {};
+			$scope.modUser.title="新增用户";
+			$scope.modUser.modType="add";
+			$("#userName").removeAttr("readOnly");
+			$("#userModal").modal("show");
+		}
+		//打开修改用户弹出框--done
+		$scope.openModifyPage = function(){
+			if(!$scope.pageRes.user){
+				swalerror("请选择用户","修改用户");
+				return false;
+			}
+			var userInfo = eval("("+$scope.pageRes.user+")");
+			$scope.modUser = userInfo;
+			$scope.modUser.title="修改用户";
+			$scope.modUser.modType="mod";
+			$("#userName").attr("readOnly","readOnly");
+			$("#userModal").modal("show");
+		}
+		//打开新增角色弹出框
+		$scope.openCreateRole = function(){
+			$scope.modRole = {};
+			$scope.modRole.title="新增角色";
+			$("#roleModal").modal("show");
+		}
+		//打开修改角色弹出框
+		/*$scope.openModifyRole = function(){
+			if(!$scope.pageRes.user){
+				swalerror("请选择用户","修改用户");
+				return false;
+			}
+			var userInfo = eval("("+$scope.pageRes.user+")");
+			$scope.modUser = userInfo;
+			$scope.modUser.title="修改用户";
+			$scope.modUser.modType="mod";
+			$("#userName").attr("readOnly","readOnly");
+			$("#userModal").modal("show");
+		}*/
+		//角色就只新增删除， 不修改了。 
+		$scope.modifyRole = function(){
+			if(!$scope.modRole.roleCode || !$scope.modRole.roleName){
+				swallerror("请录入角色code和角色 名","新增角色");
+			}else{
+				swal({
+					title:"新增角色",
+					text:"确认新增该角色吗 ?",
+					type: "warning",
+	                showCancelButton: true,
+	                confirmButtonColor: "#DD6B55",
+	                confirmButtonText: "确认",
+	                closeOnConfirm: false
+				},function(){
+					$http.post("userManage/modifyRole.do",$scope.modRole)
+					.success(function(data){
+						if(data.code && data.code == "1"){
+							swalsucc(data.msg,"角色信息修改完成。");
+							loadinfo();
+						}else{
+							swalerror(data.msg,"角色信息修改失败。")
+						}
+						$("#roleModal").modal("hide");
+					})
+				})
+			}
+		}
+		//修改 --done
+		$scope.modifyUser = function(){
+			if(!$scope.modUser.title){
+				swalerror("请重新打开页面","用户修改");
+			}else if(!$scope.modUser.userName || !$scope.modUser.userRealname){
+				swalerror("请录入账号和姓名","用户修改");
+			}else{
+				swal({
+					title:"修改用户",
+					text:"确认修改该用户信息吗 ?",
+					type: "warning",
+	                showCancelButton: true,
+	                confirmButtonColor: "#DD6B55",
+	                confirmButtonText: "确认",
+	                closeOnConfirm: false
+				},function(){
+					$http.post("userManage/modifyUser.do",$scope.modUser)
+					.success(function(data){
+						if(data.code && data.code == "1"){
+							swalsucc(data.msg,"用户信息修改完成。");
+							$("#userModal").modal("hide");			
+							$("#queryName").val("");
+							$scope.queryUser();
+						}else{
+							swalerror(data.msg,"用户修改失败。")
+						}
+						
+					})
+				})
+			}
+		}
+	}
+</script>

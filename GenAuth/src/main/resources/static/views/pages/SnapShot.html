@@ -1,0 +1,144 @@
+<meta charset="utf-8">
+<div class="row">
+	<div class="col-lg-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>快照查询</h5>
+			</div>
+			<div class="ibox-content">
+				<div class="row">
+					<div class="col-sm-5 m-b-xs" style="overflow: hidden">
+						<div class="input-daterange input-group" id="datepicker"
+							style="float: left">
+							<span class="input-group-addon">开始时间</span>
+							<input type="text" class="input-sm form-control" value="" ng-model="queryBean.starttime" />
+							<span class="input-group-addon">结束时间</span>
+							<input type="text" class="input-sm form-control" value="" ng-model="queryBean.endtime" />
+						</div>
+					</div>
+					<div class="col-sm-5 m-b-xs" style="overflow: hidden">
+						<div class="input-group" style="float: left">
+							<span class="input-group-addon">标题</span>
+							<input type="text" class="input-sm form-control" value="" ng-model="queryBean.title" />
+							<span class="input-group-addon">URI</span>
+							<input type="text" class="input-sm form-control" value="" ng-model="queryBean.requestUri" />
+							<span class="input-group-addon">用户ID</span>
+							<input type="text" class="input-sm form-control" value="" ng-model="queryBean.crreateBy" />
+						</div>
+					</div>
+					<div class="col-sm-2 pull-right">
+						<div class="input-group" style="padding-right: 50%">
+							<span class="input-group-btn">
+								<button type="button" ng-click="reloadinfo()"
+									class="btn btn-sm btn-primary">
+									查询</button>
+							</span> <span class="input-group-btn">
+								<button type="button" ng-click="exportinfo()"
+									class="btn btn-sm btn-primary">导出</button>
+							</span>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th style="word-break: keep-all; white-space: nowrap;"
+								 ng-repeat="head in tableHeaders track by $index">{{ head }}</th>
+								 <th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="page in pages track by $index">
+								<td><label class="label label-primary">{{ $index+1 }}</label></td>
+								<td><label class="label laben-info">{{ page.title}}</label></td>
+								<td><label class="label laben-info">{{ page.createBy}}</label></td>
+								<td><label class="label laben-info">{{ page.createDateStr}}</label></td>
+								<td><label class="label laben-info">{{ page.remoteAddr}}</label></td>
+								<td><label class="label laben-info">{{ page.requestUri}}</label></td>
+								<td><span class="label label-primary" ng-click="showInfo(page.id)">查看</span></td>		
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<nav>
+					<ul class="pager">
+						<li><a href="javascript:void(0)"
+							ng-click="pageInfo.paginationClick('left')">上一页</a></li>
+						<li><a href="javascript:void(0)"
+							ng-click="pageInfo.paginationClick('right')">下一页</a></li>
+					</ul>
+				</nav>
+				<pre>当前页:{{ pageInfo.currPage  }}&nbsp;&nbsp;&nbsp;总页数:{{ pageInfo.totalPageCount }}&nbsp;&nbsp;&nbsp;总记录数:{{ pageInfo.totalCount }}</pre>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+  var pageBean = {};
+  //日期插件设置
+  var dateInit=function(){
+	$('.input-daterange').datepicker({
+		format:"yyyymmdd",
+	    keyboardNavigation: false,
+	    forceParse: true,
+	    autoclose: true,
+    });
+  }
+  //页面初始函数
+  var pageload=function(){
+	  dateInit();
+	  loadinfo(true);
+	  $scope.queryBean = {};
+	  $scope.exportinfo=function(){
+	  	var exportUrl = urlCode+"/exportData.do";
+		var queryStr = param($scope.queryBean);
+	    if(queryStr){
+	    	exportUrl += "?"+queryStr;
+	    }
+	    window.location.href=exportUrl;
+	  }	  
+	  $scope.reloadinfo = function(){
+		  loadinfo(true);
+	  }
+	  $scope.showInfo = function(snapshotId){
+		  window.open("#/snapshotInfo?id="+snapshotId);
+	  }
+  }   
+  
+  //数据加载和渲染
+  var loadinfo=function(isReload){
+	//首次查询设置currPage=1
+	if(isReload){
+		pageBean.currPage='1';
+	}
+	if(!pageBean.currPage){
+		pageBean.currPage='1';
+	}
+	//设置每页显示条数。默认30
+	//pageBean.pageSize=30;
+	//查询前情况page
+	pageBean.page={};
+	var queryUrl;
+	if ($scope.urlCode) {
+		queryUrl = $scope.urlCode + "/queryData.do";
+	} else {
+		swallErr("请在config.js中配置URLCode");
+	}
+	//数据查询
+	$http.post(queryUrl, $.extend({},pageBean,$scope.queryBean)).success(
+			function(response) {
+				pageBean = response;//接替后台穿过来的json
+				//$scope.pages = pageBean.page;//数据集合
+				$scope.pages = pageBean.pageT;//数据集合
+				$scope.tableHeaders = pageBean.tableHeaders; //表格头
+				setPagination(pageBean.currPage, pageBean.totalPageCount,
+						pageBean.totalCount, angula);//设置分页
+				$scope.queryBean.starttime = pageBean.starttime;
+				$scope.queryBean.endtime = pageBean.endtime;
+						
+			})
+	}
+</script>

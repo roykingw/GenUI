@@ -1,0 +1,218 @@
+<meta charset="utf-8">
+
+<div class="row white-bg">
+	<div class="col-lg-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>Form控件演示</h5><br />
+				整合后的查询条件为： {{ queryBean }}<br />
+				弹出框的修改对象为: {{ modifyBean }}
+			</div>
+			<div class="ibox-content">
+				<div class="row">
+					<div class="col-sm-3 m-b-xs" style="overflow: hidden">
+						<div class="input-group input-daterange" id="datepicker"
+							style="float: left">
+							<span class="input-group-addon">开始日期</span>
+							<input type="text" class="input-sm form-control" value=""
+								ng-model="queryBean.startDate" /> 
+							<span class="input-group-addon">结束日期</span>
+							<input type="text" class="input-sm form-control" value=""
+								ng-model="queryBean.endDate" />
+						</div>
+					</div>
+					<div class="col-sm-3 m-b-xs" style="overflow: auto">
+						<div class="input-group">
+							<span class="input-group-addon">普通下拉框</span>
+							<span style="position: relative; z-index: 1;">
+							<select class="select2" id="select1" ng-model="queryBean.select1">
+								<option ng-repeat="item in cond1" value="{{item.key}}">{{item.value}}</option>
+							</select></span>
+						</div>
+					</div>
+					<div class="col-sm-3 m-b-xs" style="overflow: hidden">
+						<div class="input-group">
+							<span class="input-group-addon">交易类型</span>
+							<dictpicker dict-type="tx_typ" ng-model="queryBean.select2"></dictpicker>
+						</div>
+					</div>
+					<div class="col-sm-3 m-b-xs" style="overflow: hidden">
+						<div class="input-group">
+							<span class="input-group-addon">单选框</span>
+							<div class="radio radio-info radio-inline" ng-repeat="item in cond1 track by $index">
+					            <input type="radio" id="rd{{$index}}" name="paramType" value="{{ item.value }}" ng-model="queryBean.paramType">
+					            <label for="rd{{ $index }}"> {{ item.key}} </label>
+					        </div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					
+					<div class="col-sm-3 m-b-xs">
+						<div class="input-group">
+							<span class="input-group-addon">layDate:</span>
+							<input type="text" class="form-control layDate" placeholder="" ng-model="queryBean.layDate">
+						</div>
+					</div>
+					<div class="col-sm-3 m-b-xs">
+						<div class="input-group">
+							<span class="input-group-addon">输入框格式 IP地址</span>
+							<input type="text" class="form-control" data-mask="999.999.999.999" placeholder="" ng-model="queryBean.mask1">
+						</div>
+					</div>
+					<div class="col-sm-3">
+						<div class="input-group" style="padding-right: 50%">
+							<span class="input-group-btn">
+								<button type="button" class="btn btn-sm btn-primary" ng-click="openModal()">主按钮:弹出框</button>
+							</span> <span class="input-group-btn">
+								<button type="button" class="btn btn-sm btn-warning">警告按钮</button>
+							</span> <span class="input-group-btn">
+								<button type="button" class="btn btn-sm btn-error">错误按钮</button>
+							</span> <span class="input-group-btn">
+								<button type="button" class="btn btn-sm btn-info">通知按钮</button>
+							</span> <span class="input-group-btn">
+								<button type="button" class="btn btn-sm btn-danger">危险按钮</button>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+				<hr />
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th style="word-break: keep-all; white-space: nowrap;">黑名单类型</th>
+								<th style="word-break: keep-all; white-space: nowrap;">关键字</th>
+								<th style="word-break: keep-all; white-space: nowrap;">交易类型</th>
+								<th style="word-break: keep-all; white-space: nowrap;">业务类型</th>
+								<th style="word-break: keep-all; white-space: nowrap;">过期时间</th>
+								<th style="word-break: keep-all; white-space: nowrap;">理由</th>
+								<th style="word-break: keep-all; white-space: nowrap;">备注</th>
+								<th style="word-break: keep-all; white-space: nowrap;">创建日期</th>
+								<th style="word-break: keep-all; white-space: nowrap;">更新者</th>
+								<th style="word-break: keep-all; white-space: nowrap;">更新日期</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td><span class="label-primary">1</span></td>
+								<td>黑名单类型</td>
+								<td>关键字</td>
+								<td>交易类型</td>
+								<td>业务类型</td>
+								<td>过期时间</td>
+								<td>理由</td>
+								<td>备注</td>
+								<td>创建日期</td>
+								<td>更新者</td>
+								<td>更新日期</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<nav>
+					<ul class="pager">
+						<li><a href="javascript:void(0)">上一页</a></li>
+						<li><a href="javascript:void(0)">下一页</a></li>
+					</ul>
+				</nav>
+				<pre>当前页:1&nbsp;&nbsp;&nbsp;总页数:1&nbsp;&nbsp;&nbsp;总记录数:1</pre>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal inmodal fade" id="modifyModal" tabindex="2"
+	role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">
+					<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+				</button>
+				<h4 class="modal-title">数据ID：{{ modifyBean.id }}</h4>
+			</div>
+			<div class="modal-body">
+				<form class="bs-example bs-example-form" role="form">
+					<input type="hidden" class="form-control" ng-model="obj.id" />
+					<div class="input-group">
+						<span class="input-group-addon">下拉框:</span>
+						<select class="select2" id="select2" ng-model="queryBean.select1">
+							<option ng-repeat="item in cond1" value="{{item.key}}">{{item.value}}</option>
+						</select>
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">单选框:</span> <input type="text"
+							class="form-control" ng-readonly="modifyBean.id" ng-model="modifyBean.keyId" />
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">日期:</span><input type="text"
+							class="form-control layDate" id="expDt" ng-model="modifyBean.expDt" />
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">原因:</span> <input type="text"
+							class="form-control" ng-model="modifyBean.reason" />
+					</div>
+					<br>
+					<div class="input-group">
+						<span class="input-group-addon">备注:</span> <input type="text"
+							class="form-control" ng-model="modifyBean.remarks" />
+					</div>
+					<br>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+				<button type="button" class="btn btn-primary"
+					ng-click="modifyData()">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+var pageBean = {};
+//日期插件设置
+var dateInit = function() {
+	$('.input-daterange').datepicker({
+		format : "yyyymmdd",
+		keyboardNavigation : false,
+		forceParse : true,
+		autoclose : true,
+	});
+}
+var pageload = function() {
+	dateInit();
+	$(".select2").select2({
+		placeholder: "--选择已有数据--",
+		allowClear: true,
+		width:'100%'
+	});
+	//单选框测试数据
+	var dictitems = [{'key':'key1','value':'value1'},{'key':'key2','value':'value2'},{'key':'key3','value':'value3'}];
+    $scope.cond1 = dictitems;
+    //layDate控件 选择秒。
+    lay(".layDate").each(function(){
+    	laydate.render({
+    		  elem: this //指定元素
+    		  ,type: 'datetime' //type可选值：year,month,time,datetime
+    		  ,trigger: 'click'
+    		  //,range: true //选择范围
+    		  ,format: 'yyyy年MM月dd日HH时mm分ss秒'
+    		});
+    })
+    //弹出框操作
+    $scope.modifyBean = {}
+    $scope.openModal = function(){
+    	console.info("1111  "+$(".layDate:first").val());
+    	$("#modifyModal").modal("show");
+    	$scope.modifyBean.id="";
+    }
+    //字典内容翻译
+    $scope.tx_typ_t = "90";
+}
+</script>

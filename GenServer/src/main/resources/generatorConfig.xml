@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+	<properties resource="myBatisconfig.properties"/>
+	<classPathEntry location="D:/gitCode/GenUI/GenServer/src/main/resources/mysql-connector-java-5.1.18.jar"/>
+	<!-- classPathEntry location="F:/workspace-sts/mbGenerate/ojdbc6-11.2.0.3.jar"/ -->
+		<context id="mysql" targetRuntime="MyBatis3">
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin" />
+		<plugin type="org.mybatis.generator.plugins.ToStringPlugin" />
+		<!-- 
+		<plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+		<plugin type="org.mybatis.generator.plugins.CachePlugin" >
+			<property name="cache_readOnly" value="true"/>
+			<property name="cache_eviction" value="FIFO"/>
+			<property name="cache_size" value="512"/>
+			<property name="flushInterval" value="5000"/>
+		</plugin>
+		 -->
+		
+		<jdbcConnection driverClass="${db.driverClassName}" 
+			connectionURL="${db.url}"
+			userId="${db.username}" 
+			password="${db.password}" />
+		<javaTypeResolver >
+	      <property name="forceBigDecimals" value="false" />
+	    </javaTypeResolver>
+	    
+		<javaModelGenerator targetPackage="${targetPackage.model}"
+			targetProject="${targetProject}" >
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>	
+		
+		<sqlMapGenerator targetPackage="${targetPackage.sqlMap}" targetProject="${targetProject}" />
+		<javaClientGenerator targetPackage="${targetPackage.mapper}"
+			targetProject="${targetProject}" type="XMLMAPPER" />
+		 <!--  sqlserver 导出
+		 <table schema="${db.schema}" catalog="de_MSCRM" tableName="new_cityBase" 
+				enableCountByExample="false" 
+				enableUpdateByExample="false"
+				enableDeleteByExample="false" 
+				enableSelectByExample="false"
+				selectByExampleQueryId="false" >
+		</table>
+		 
+		 mysql 导出
+		 <table schema="${db.schema}" catalog="fugao_his" tableName="register" 
+			/>
+		 <table schema="${db.schema}" catalog="fugao_his" tableName="his_department"
+			/>	
+
+		 <table schema="${db.schema}"  tableName="t_client"/>-->
+		<!-- oracle -->	
+		 <!-- table schema="${db.schema}" tableName="sys_dict"/ -->
+		 <table schema="${db.schema}" tableName="black_info"/>
+
+	</context>
+</generatorConfiguration>

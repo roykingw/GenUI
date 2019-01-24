@@ -1,0 +1,41 @@
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close" ng-click="close()">
+        <span aria-hidden="true">×</span></button>
+    <h4 class="modal-title">提示 :</h4>
+</div>
+<div class="modal-body">
+    <!-- show information-->
+    <div class="col-md-12">
+        <div class="box box-solid">
+            <!-- /.box-header -->
+            <div class="box-body" style="color: black">
+                <dl class="dl-horizontal">
+                    <dt>Id</dt>
+                    <dd>{{content.id}}</dd>
+                    <dt>名称</dt>
+                    <dd>{{content.name}}</dd>
+                    <dt>创建人ID</dt>
+                    <dd>{{content.userId}}</dd>
+                    <dt>创建人</dt>
+                    <dd>{{content.userName}}</dd>
+                    <dt>创建人登录名</dt>
+                    <dd>{{content.loginName}}</dd>
+                    <dt>创建时间</dt>
+                    <dd>{{content.createTime}}</dd>
+                    <dt>更新时间</dt>
+                    <dd>{{content.updateTime}}</dd>
+                </dl>
+            </div>
+            <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+    </div>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-outline pull-left" data-dismiss="modal" ng-click="close()">
+        取消
+    </button>
+    <button type="button" class="btn btn-outline" ng-click="ok()">
+      确认
+    </button>
+</div>

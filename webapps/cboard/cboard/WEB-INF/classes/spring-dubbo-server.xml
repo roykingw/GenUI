@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+    <dubbo:application name="CboardReport"  />
+    <dubbo:registry address="zookeeper://127.0.0.1:2181" />
+    <!-- dubbo:registry address="zookeeper://172.16.49.243:2181?backup=172.16.49.244:2181,172.16.49.245:2181" /-->
+    <dubbo:protocol name="dubbo" port="20883" />
+
+    <dubbo:service interface="services.CboardService" ref="thirdPartService" />
+</beans>

@@ -1,0 +1,157 @@
+<meta charset="utf-8">
+<div class="row animated fadeInRight">
+	<div class="col-lg-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>{{ pageTitle }}</h5>
+			</div>
+			<div class="ibox-content">
+				<div class="row">
+					<div class="col-sm-4 m-b-xs" style="overflow: hidden">
+						<div class="input-daterange input-group" id="datepicker"
+							style="float: left">
+							<span class="input-group-addon">修改时间</span>
+							<input type="text" class="input-sm form-control" value="" ng-model="queryBean.starttime" />
+							<span class="input-group-addon">到</span>
+					        <input type="text" class="input-sm form-control" value="" ng-model="queryBean.endtime"/>
+						</div>
+					</div>
+					<div class="col-sm-3 m-b-xs" style="overflow: hidden">
+						<div class="input-group">
+							<span class="input-group-addon">字典类型</span> <input type="text"
+								class="input-sm form-control" value="" ng-model="queryBean.dictType" />
+						</div>
+					</div>
+					<div class="col-sm-3 m-b-xs" style="overflow: hidden">
+						<div class="input-group">
+							<span class="input-group-addon">字典值</span> <input type="text"
+								class="input-sm form-control" value="" ng-model="queryBean.dictValue" />
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="input-group" style="padding-right: 50%">
+							<span class="input-group-btn">
+								<button type="button" ng-click="reloadinfo()"
+									class="btn btn-sm btn-primary" ng-if="userPages.sysDict_query">
+									查询</button>
+							</span> <span class="input-group-btn">
+								<button type="button" ng-click="exportinfo()"
+									class="btn btn-sm btn-primary"
+									ng-if="userPages.sysDict_export">导出</button>
+							</span>
+						</div>
+					</div>
+				</div>
+				<hr />
+				<div class="table-responsive">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>#</th>
+								<th style="word-break: keep-all; white-space: nowrap;"
+								 ng-repeat="head in tableHeaders track by $index">{{ head }}</th>
+								 <th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="page in pages track by $index">
+								<td><label class="label label-primary">{{ $index+1 }}</label></td>
+								<td ng-repeat="value in page track by $index">{{ value }}</td>
+								<td>
+									<div class="input-group-btn">
+										<a class="label label-primary" ng-click="updateData(pagesT[$index])" title="删除">
+											<i class="fa fa-minus-square-o" aria-hidden="true"></i></a>
+										<a class="label label-primary" ng-click="updateData(pagesT[$index])" title="修改">
+											<i class="fa fa-pencil-square-o"/></a>
+									</div>
+								</td>		
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<nav>
+					<ul class="pager">
+						<li><a href="javascript:void(0)"
+							ng-click="pageInfo.paginationClick('left')">上一页</a></li>
+						<li><a href="javascript:void(0)"
+							ng-click="pageInfo.paginationClick('right')">下一页</a></li>
+					</ul>
+				</nav>
+				<pre>当前页:{{ pageInfo.currPage  }}&nbsp;&nbsp;&nbsp;总页数:{{ pageInfo.totalPageCount }}&nbsp;&nbsp;&nbsp;总记录数:{{ pageInfo.totalCount }}</pre>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+  var pageBean = {};
+  //日期插件设置
+  var dateInit=function(){
+	$('.input-daterange').datepicker({
+		format:"yyyymmdd",
+	    keyboardNavigation: false,
+	    forceParse: true,
+	    autoclose: true,
+    });
+  }
+  //页面初始函数
+  var pageload=function(){
+	  dateInit();
+	  loadinfo(true);
+	  $scope.queryBean = {};
+	  $scope.exportinfo=function(){
+		var exportUrl;
+		if(!$scope.urlCode){
+			swalerror("请在config.js中配置urlcode","数据处理错误");
+		}else{
+			exportUrl = $scope.urlCode+"/exportData.do";
+		}
+		var queryStr = param($scope.queryBean);
+	    if(queryStr){
+	    	exportUrl += "?"+queryStr;
+	    }
+	    window.location.href=exportUrl;
+	  }	  
+	  $scope.reloadinfo = function(){
+		  loadinfo(true);
+	  }
+	  $scope.updateData = function(data){
+		  swalsucc("要修改的数据ID为 "+data.dictId+" /r/n 只做个Demo就懒得去实现了。可参照系统管理部分的页面模版及实现","暂未实现");
+	  }
+  }   
+  
+  //数据加载和渲染
+  var loadinfo=function(isReload){
+	//首次查询设置currPage=1
+	if(isReload){
+		pageBean.currPage='1';
+	}
+	if(!pageBean.currPage){
+		pageBean.currPage='1';
+	}
+	//设置每页显示条数。默认30
+	//pageBean.pageSize=30;
+	//查询前情况page
+	pageBean.page={};
+	var queryUrl;
+	if ($scope.urlCode) {
+		queryUrl = $scope.urlCode + "/queryData.do";
+	} else {
+		swallErr("请在config.js中配置URLCode");
+	}
+    var queryStr = param($scope.queryBean);
+    if(queryStr){
+    	queryUrl += "?"+queryStr;
+    }
+	//数据查询
+	$http.post(queryUrl, pageBean).success(
+			function(response) {
+				pageBean = response;//接替后台穿过来的json
+				$scope.pages = pageBean.page;//Bean中配置了column 的 excelHeader 的结果集。 这是只需要直接展示的结果集。
+				$scope.pagesT = pageBean.pageT;//Bean中配置了column 属性的结果集。 这是整个DB查询出来的结果集。 
+				$scope.tableHeaders = pageBean.tableHeaders
+
+				setPagination(pageBean.currPage, pageBean.totalPageCount,
+						pageBean.totalCount, angula);
+			})
+	}
+</script>

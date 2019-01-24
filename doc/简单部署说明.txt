@@ -1,0 +1,72 @@
+项目目标：项目开发中，权限体系以及系统安全一般都是很鸡肋的部分。相比具体业务，实际价值很少但是又必不可少。
+	该项目即旨在形成一套开箱即用的权限体系，同时以最大程度的减少这些模块对业务部分的侵入耦合，甚至提供一些快速简单的开发方式。
+	让开发人员能够减少coding,更专心于业务,并且有个愉快的开发体验。
+
+模块说明：
+1、genauth:前台主体框架。 主要功能包括管理元数据维护、前台页面展示。
+2、GenServer:后台服务框架。主要功能为通过dubbo给genauth提供数据支持。
+3、GenApi:dubbo服务提供者与消费者交互的接口。主要维护service接口和POJO。
+4、webapps/dubo-admin:基于dubbo2.5.8版本编译的dubbo监控服务，编译后的应用包。
+5、webapps/cboard:开源报表工具cboard 0.4.1版本的修改版本。编译后的应用包。
+6、zookeeper GenUI外部依赖的zookeeper。--开发调试用的3.4.5版本。
+
+数据源说明：
+genauth和GenServer的配置文件通过对主启动类配置boot.env参数进行指定。默认
+1、管理元数据数据源。
+
+主要配置文件(部署环境可能要修改的)：
+genauth和GenServer：主要要修改的配置文件通过对主启动类配置运行参数 -Dboot.env=XXX进行指定。对应的配置文件为application.properties和application-XXX.properties
+	主要需要维护数据库地址和zookeeper地址。
+dubbo-admin：主要要修改的配置文件为dubbo.properties。 主要维护zookeeper地址。详细配置参见dubbo官方文档。
+cboard：主要要ixugia的配置文件为 /WEB-INF/classes/config.properties 和 /WEB-INF/classes/spring-dubbo-server.xml
+	第一个配置文件主要修改数据源地址。可以单独部署，建议与genauth的管理元数据配置到一起。
+	第二个配置文件主要修改外部zookeeper的地址。
+
+数据源维护说明：将三个数据源进行单独的管理，具体项目中怎么部署自己定。
+1、管理元数据：genauth使用的元数据库。初始化脚本在GenUI/sql/genauth下。
+2、cboard管理元数据库：cboard使用的管理元数据库。初始化脚本在GenUI/sql/cboard
+3、后台管理数据：GenServer使用的具体业务数据库。初始化的页面快照、字典等几个基础功能的初始化脚本在GenUI/sql/GenServer下。
+	在这个微服务体系下，GenServer是一个服务提供者的模版工程。初始化的版本集成了基于关系型数据库的页面快照、数据字典、通用分页查询、通用导出等几个基础功能。
+	实际架构中，可以进行定制化的扩展。甚至基于dubbo重新搭建服务提供者。
+
+部署步骤：
+1、外部依赖的zookeeper,单独进行启动。
+2、将webapps下的cboard和dubbo-admin复制到servlet容器中(例如tomcat的webapp)目录。启动(配置文件根据环境自行维护好)
+	--启动后可以进入dubbo-admin页面查看到cboard往dubbo注册的服务。
+3、启动GenServer注册服务。为spring boot开发的一个服务后端。其他服务可以自行通过dubbo扩展。
+	--spring boot程序的部署方式不做详细讲解，只做简单的说明。不懂的可以度娘。
+	开发环境启动方式为直接启动主启动类ServerApplication.java 需要配置-Dboot.env=XXX参数。
+	服务器端部署方式为定制一个开发脚本 最终调用 java -cp {runlib/*.jar GenServer.jar} com.genService.ServerApplication.java -Dboot.env=XXX 1>{logfile} 2>&1
+	--启动后可以进入dubbo-admin页面查看到genServer往dubbo注册的服务
+4、启动主体应用genauth。为spring boot开发的应用。具体部署参见上面。
+	--初始化的示例版本中，genauth配置为启动依赖GenServer提供的服务，而不依赖cboard提供的服务。因此理论上需要启动GenServer后才能启动。
+	--服务的依赖检查参看dubbo官方文档。
+
+示例功能说明：
+1、最大的大头：集成大神开源的CBoard报表工具。支持在cboard中开发的看板直接嵌入进来作为前端系统的一张报表。图形化的报表开发舒爽愉悦。
+	具体配置只需要配置一个菜单statePath为 cboard.dashboard({id:看板ID})即可。快速简单。
+2、genauth前端，基于Angularjs和BootStrap开发，页面模版采用Inspinia。响应式布局，大气美观，而且天生兼容PC、平板、手机。
+3、完善的监控功能。对平台运行情况，访问者操作全盘掌握。
+	1》集成了alibaba的druid数据库连接池检控功能。像这样：
+	2》平台登录人数，访问路径，操作记录  一目了然。捣乱者一键踢下线。像这样：
+	3》基于websocket实时日志监控。平台所有操作即刻了解。像这样：
+4、完善简洁的权限管理系统。没有使用shiro等其他框架，自行开发，最大的好处是灵活便于扩展.
+	对每个菜单，配置几个参数：
+	statePath:Anguarls router的state路径。--具体参见Angularjs资料。
+	menuCode:菜单权限标识。主要用于控制登录后左侧菜单的权限以及访问路径的权限。
+	ControllerCode:菜单后台访问权限。基于一个Controller给一个菜单提供数据的模型建立。配置后台Controller的类名，用于控制后台访问权限。
+		--由于后台数据由基于dubbo的服务提供者来提供，genauth中的Controller仅仅只作为一个通道来使用。因此这种设计约定应该是没有什么问题的。
+	pageCode:用于控制菜单页面控件的权限标识。 目前采用默认的_export(导出)和_query(查询)两个页面标识，不需要配置。如果需要可以进行扩展。
+		--页面使用时，只要在需要控制权限的控件中使用 AngualrJS执行令 ng-if=userPages.${menuCode}_query(查询权限) 或者  userPages.${menuCode}_export(导出权限)就能将控件的权限与配置进行绑定。
+3、基于注解的快速报表开发。GenServer中提供了基于POJO中的自定义注解实现的查询与导出的统一封装。再加上AngualrJS比较固定的模版，能支持自定义实现的快速报表开发。
+	--数据的修改和删除理论上应该由后台服务提供者自行控制。以后也会提供简单的封装。
+	
+
+后续的规划：项目经历了有几家公司的实际应用，逐步完善起来。但是由于开源还在起步阶段，自己也只有闲暇时间才有时间维护。很多功能还需慢慢完善。
+	1、代码自动生成。前端模版和后台代码一键生成。
+		虽然现在的页面开发速度已经大大提升，熟练开发后一天五到六个管理页面开发轻而易举。但是还是需要部分的复制粘贴。一键生成更为靠谱。
+		另外，关于一键生成的快速开发，虽然市面上也看到很多这样的产品。但是这个产品基于AnguarJS开发，能够最大程度上的进行前端模版复用。代码将更加简洁。
+	2、更完善的监控。对于管理平台，安全始终是一个头疼费劲还不讨好的麻烦事情，后续希望能够帮助开发人员从这些东西中抽身出来，更多的关注业务。
+		预备基于访问日志做更多的整体监控以及运行报警，定时提醒等功能。
+	3、更高效的性能提升。
+	4、组件升级。跟踪相关组件的升级以及新组件的引入，如AngularJS虽然我很喜欢，但是不可否认已经慢慢进入衰退期。还需优化。

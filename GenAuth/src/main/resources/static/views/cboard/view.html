@@ -1,0 +1,17 @@
+<meta charset="utf-8"/>
+<div class="row animated fadeInRight">
+	<div class="col-lg-12">
+		<div class="alert alert-info"><font color="black">提示：需要部署配套的CBoard应用</font></div>
+	</div>
+	<div class="col-lg-12"  ng-if="errorInfo">
+		<div class="alert alert-warning"><font color="red">{{ errorInfo }}</font></div>
+	</div>
+</div>
+<ng-switch on="board.layout.type">
+    <div ng-switch-when="timeline">
+        <div ng-include="'views/cboard/dashboard/layout/timeline.html'"></div>
+    </div>
+    <div ng-switch-default>
+        <div ng-include="'views/cboard/dashboard/layout/grid.html'"></div>
+    </div>
+</ng-switch>
